@@ -1,0 +1,281 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		17C6A00415B5B02100372355 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C6A00315B5B02100372355 /* UIKit.framework */; };
+		17C6A00615B5B02100372355 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C6A00515B5B02100372355 /* Foundation.framework */; };
+		17C6A00815B5B02100372355 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C6A00715B5B02100372355 /* CoreGraphics.framework */; };
+		17C6A00E15B5B02100372355 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 17C6A00C15B5B02100372355 /* InfoPlist.strings */; };
+		17C6A01015B5B02100372355 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C6A00F15B5B02100372355 /* main.m */; };
+		17C6A01415B5B02100372355 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C6A01315B5B02100372355 /* AppDelegate.m */; };
+		17C6A01715B5B02100372355 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17C6A01515B5B02100372355 /* MainStoryboard.storyboard */; };
+		17C6A01A15B5B02100372355 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C6A01915B5B02100372355 /* ViewController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		17C69FFF15B5B02100372355 /* stereo_vision.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stereo_vision.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		17C6A00315B5B02100372355 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		17C6A00515B5B02100372355 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		17C6A00715B5B02100372355 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		17C6A00B15B5B02100372355 /* stereo_vision-Info.plist */ = {isa = PBXFileReference; path = "stereo_vision-Info.plist"; sourceTree = "<group>"; };
+		17C6A00D15B5B02100372355 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		17C6A00F15B5B02100372355 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		17C6A01115B5B02100372355 /* stereo_vision-Prefix.pch */ = {isa = PBXFileReference; path = "stereo_vision-Prefix.pch"; sourceTree = "<group>"; };
+		17C6A01215B5B02100372355 /* AppDelegate.h */ = {isa = PBXFileReference; path = AppDelegate.h; sourceTree = "<group>"; };
+		17C6A01315B5B02100372355 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		17C6A01615B5B02100372355 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		17C6A01815B5B02100372355 /* ViewController.h */ = {isa = PBXFileReference; path = ViewController.h; sourceTree = "<group>"; };
+		17C6A01915B5B02100372355 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		17C69FFC15B5B02100372355 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				17C6A00415B5B02100372355 /* UIKit.framework in Frameworks */,
+				17C6A00615B5B02100372355 /* Foundation.framework in Frameworks */,
+				17C6A00815B5B02100372355 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		17C69FF415B5B02100372355 = {
+			isa = PBXGroup;
+			children = (
+				17C6A00915B5B02100372355 /* stereo_vision */,
+				17C6A00215B5B02100372355 /* Frameworks */,
+				17C6A00015B5B02100372355 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		17C6A00015B5B02100372355 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				17C69FFF15B5B02100372355 /* stereo_vision.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		17C6A00215B5B02100372355 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				17C6A00315B5B02100372355 /* UIKit.framework */,
+				17C6A00515B5B02100372355 /* Foundation.framework */,
+				17C6A00715B5B02100372355 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		17C6A00915B5B02100372355 /* stereo_vision */ = {
+			isa = PBXGroup;
+			children = (
+				17C6A01215B5B02100372355 /* AppDelegate.h */,
+				17C6A01315B5B02100372355 /* AppDelegate.m */,
+				17C6A01515B5B02100372355 /* MainStoryboard.storyboard */,
+				17C6A01815B5B02100372355 /* ViewController.h */,
+				17C6A01915B5B02100372355 /* ViewController.m */,
+				17C6A00A15B5B02100372355 /* Supporting Files */,
+			);
+			path = stereo_vision;
+			sourceTree = "<group>";
+		};
+		17C6A00A15B5B02100372355 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				17C6A00B15B5B02100372355 /* stereo_vision-Info.plist */,
+				17C6A00C15B5B02100372355 /* InfoPlist.strings */,
+				17C6A00F15B5B02100372355 /* main.m */,
+				17C6A01115B5B02100372355 /* stereo_vision-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		17C69FFE15B5B02100372355 /* stereo_vision */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 17C6A01D15B5B02100372355 /* Build configuration list for PBXNativeTarget "stereo_vision" */;
+			buildPhases = (
+				17C69FFB15B5B02100372355 /* Sources */,
+				17C69FFC15B5B02100372355 /* Frameworks */,
+				17C69FFD15B5B02100372355 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = stereo_vision;
+			productName = stereo_vision;
+			productReference = 17C69FFF15B5B02100372355 /* stereo_vision.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		17C69FF615B5B02100372355 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = 17C69FF915B5B02100372355 /* Build configuration list for PBXProject "stereo_vision" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 17C69FF415B5B02100372355;
+			productRefGroup = 17C6A00015B5B02100372355 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				17C69FFE15B5B02100372355 /* stereo_vision */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		17C69FFD15B5B02100372355 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				17C6A00E15B5B02100372355 /* InfoPlist.strings in Resources */,
+				17C6A01715B5B02100372355 /* MainStoryboard.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		17C69FFB15B5B02100372355 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				17C6A01015B5B02100372355 /* main.m in Sources */,
+				17C6A01415B5B02100372355 /* AppDelegate.m in Sources */,
+				17C6A01A15B5B02100372355 /* ViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		17C6A00C15B5B02100372355 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				17C6A00D15B5B02100372355 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		17C6A01515B5B02100372355 /* MainStoryboard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				17C6A01615B5B02100372355 /* en */,
+			);
+			name = MainStoryboard.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		17C6A01B15B5B02100372355 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		17C6A01C15B5B02100372355 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		17C6A01E15B5B02100372355 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "stereo_vision/stereo_vision-Prefix.pch";
+				INFOPLIST_FILE = "stereo_vision/stereo_vision-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		17C6A01F15B5B02100372355 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "stereo_vision/stereo_vision-Prefix.pch";
+				INFOPLIST_FILE = "stereo_vision/stereo_vision-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		17C69FF915B5B02100372355 /* Build configuration list for PBXProject "stereo_vision" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				17C6A01B15B5B02100372355 /* Debug */,
+				17C6A01C15B5B02100372355 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		17C6A01D15B5B02100372355 /* Build configuration list for PBXNativeTarget "stereo_vision" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				17C6A01E15B5B02100372355 /* Debug */,
+				17C6A01F15B5B02100372355 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 17C69FF615B5B02100372355 /* Project object */;
+}
