@@ -7,7 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SessionManager.h"
 
 @interface ViewController : UIViewController
+
+{
+    SessionManager * _sessionManager;
+}
+
+- (IBAction)connectPressed;
+- (IBAction)calibratePressed;
+- (IBAction)reconstructPressed;
 
 @end
