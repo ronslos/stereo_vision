@@ -16,8 +16,11 @@
 @property (weak, nonatomic) IBOutlet UITextField *boardWidth;
 - (IBAction)saveHeight:(UITextField *)sender;
 @property (weak, nonatomic) IBOutlet UITextField *boardHeight;
-- (IBAction)saveSquareLength:(UITextField *)sender;
-@property (weak, nonatomic) IBOutlet UITextField *squareLength;
+- (IBAction)saveSquareHeight:(UITextField *)sender;
+@property (weak, nonatomic) IBOutlet UITextField *squareHeight;
+- (IBAction)saveSquareWidth:(UITextField *)sender;
+@property (weak, nonatomic) IBOutlet UITextField *squareWidth;
+
 @property (weak, nonatomic) IBOutlet UILabel *R1_1;
 @property (weak, nonatomic) IBOutlet UILabel *R1_2;
 @property (weak, nonatomic) IBOutlet UILabel *R1_3;
@@ -30,7 +33,23 @@
 @property (weak, nonatomic) IBOutlet UILabel *T1_1;
 @property (weak, nonatomic) IBOutlet UILabel *T2_1;
 @property (weak, nonatomic) IBOutlet UILabel *T3_1;
-
-// complete connections of the other labels
+@property (weak, nonatomic) IBOutlet UILabel *E1_1;
+@property (weak, nonatomic) IBOutlet UILabel *E1_2;
+@property (weak, nonatomic) IBOutlet UILabel *E1_3;
+@property (weak, nonatomic) IBOutlet UILabel *E2_1;
+@property (weak, nonatomic) IBOutlet UILabel *E2_2;
+@property (weak, nonatomic) IBOutlet UILabel *E2_3;
+@property (weak, nonatomic) IBOutlet UILabel *E3_1;
+@property (weak, nonatomic) IBOutlet UILabel *E3_2;
+@property (weak, nonatomic) IBOutlet UILabel *E3_3;
+@property (weak, nonatomic) IBOutlet UILabel *F1_1;
+@property (weak, nonatomic) IBOutlet UILabel *F1_2;
+@property (weak, nonatomic) IBOutlet UILabel *F1_3;
+@property (weak, nonatomic) IBOutlet UILabel *F2_1;
+@property (weak, nonatomic) IBOutlet UILabel *F2_2;
+@property (weak, nonatomic) IBOutlet UILabel *F2_3;
+@property (weak, nonatomic) IBOutlet UILabel *F3_1;
+@property (weak, nonatomic) IBOutlet UILabel *F3_2;
+@property (weak, nonatomic) IBOutlet UILabel *F3_3;
 
 @end

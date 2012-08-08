@@ -14,19 +14,22 @@
 
 @implementation ReconstructionViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+@synthesize waitPeriod = _waitPeriod;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    _sessionManager = [SessionManager instance];
+    [[_sessionManager mySession ] setDataReceiveHandler:self withContext:nil];
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"timeDelay"] != NULL) {
+        self.waitPeriod = [(NSNumber*)[[NSUserDefaults standardUserDefaults] objectForKey:@"timeDelay"] doubleValue];
+    }
+    else {
+        self.waitPeriod = 0;
+    }
+
 }
 
 - (void)viewDidUnload
@@ -38,6 +41,15 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+
+#pragma mark -
+#pragma mark GKPeerPickerControllerDelegate
+
+- (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context
+{   
+    //NSString *whatDidIget = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 }
 
 @end

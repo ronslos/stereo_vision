@@ -20,7 +20,7 @@
 
 @interface CalibrationViewController() 
 
-- (UIImage*)findCorners;
+- (UIImage*) findCorners;
 - (NSData*) dataFromVector:(cv::vector<cv::Point2f>*) vector;
  
 @end
@@ -31,6 +31,7 @@
 @synthesize calibrationButton = _calibrationButton;
 @synthesize captureBtn = _captureBtn;
 @synthesize activityIndicator = _activityIndicator;
+@synthesize waitPeriod = _waitPeriod;
 
 - (void)viewDidLoad
 {
@@ -47,15 +48,42 @@
         NSLog(@"Failed to open video camera");
     }
     else {
+        // setting parameters of the camera
         _videoCapture->set(CV_CAP_PROP_IOS_DEVICE_EXPOSURE, AVCaptureExposureModeContinuousAutoExposure);
         _videoCapture->set(CV_CAP_PROP_IOS_DEVICE_WHITEBALANCE, AVCaptureWhiteBalanceModeAutoWhiteBalance );
         _videoCapture->set(CV_CAP_PROP_IOS_DEVICE_FOCUS, AVCaptureFocusModeLocked );
     }
 #endif
     _notCapturing = YES;
-    int boardWidth = [(NSString*)[[NSUserDefaults standardUserDefaults] objectForKey:@"boardWidth"] intValue];
-    int boardHeight = [(NSString*)[[NSUserDefaults standardUserDefaults] objectForKey:@"boardHeight"] intValue];
-    _squareSize = [(NSString*)[[NSUserDefaults standardUserDefaults] objectForKey:@"squareSize"] floatValue];
+    
+    // loading stored parameters of the board
+    int boardWidth;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"boardWidth"] != NULL) {
+        boardWidth = [(NSString*)[[NSUserDefaults standardUserDefaults] objectForKey:@"boardWidth"] intValue];
+    }
+    else {
+        boardWidth = 9; // set to default number of internal corners along chessboard width
+    }
+    int boardHeight;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"boardHeight"] != NULL) {
+        boardWidth = [(NSString*)[[NSUserDefaults standardUserDefaults] objectForKey:@"boardHeight"] intValue];
+    }
+    else {
+        boardHeight = 6; // set to default number of internal corners along chessboard Height
+    }
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"squareHeight"] != NULL) {
+        _squareHeight = [(NSString*)[[NSUserDefaults standardUserDefaults] objectForKey:@"squareHeight"] intValue];
+    }
+    else {
+        _squareHeight = 1;
+    }
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"squareWidth"] != NULL) {
+        _squareWidth = [(NSString*)[[NSUserDefaults standardUserDefaults] objectForKey:@"squareWidth"] intValue];
+    }
+    else {
+        _squareWidth = 1;
+    }
+    
     _boardSize = cv::Size(boardWidth,boardHeight);
     _imageCount = 0;
     _otherImageCount = 0;
@@ -63,16 +91,17 @@
     _imagePoints[1].resize(MAX_CALIBRATION_IMAGES);
     _sessionManager = [SessionManager instance];
     [[_sessionManager mySession ] setDataReceiveHandler:self withContext:nil];
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"timeDelay"] != NULL) {
+        self.waitPeriod = [(NSNumber*)[[NSUserDefaults standardUserDefaults] objectForKey:@"timeDelay"] doubleValue];
+    }
+    else {
+        self.waitPeriod = 0;
+    }
     
-    //[self.activityIndicator setHidden:YES];
     [self.activityIndicator stopAnimating];
     [self.activityIndicator setHidesWhenStopped:YES];    
     [self showCaptureOnScreen];
     
-    // Load a test image and demonstrate conversion between UIImage and cv::Mat
-    //UIImage *testImage = [UIImage imageNamed:@"left01.jpg"];
-    
-    //_lastFrame = [testImage CVMat];
 }
 
 -(void)showCaptureOnScreen
@@ -115,6 +144,19 @@
     _captureBtn = nil;
 }
 
+/*
+-(void)willMoveToParentViewController:(UIViewController *)parent
+{
+    [[_sessionManager mySession ] setDataReceiveHandler:self.navigationController.parentViewController withContext:nil];
+}
+
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [[_sessionManager mySession ] setDataReceiveHandler:self.navigationController.presentingViewController withContext:nil];
+}
+ */
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
@@ -131,14 +173,14 @@
         return;
         
     }
+    
     dispatch_queue_t myQueue = dispatch_queue_create("my calibration thread", NULL);
-    //[self.activityIndicator setHidden:NO];
     [self.activityIndicator startAnimating];
     [self.captureBtn setEnabled:NO];
     [self.calibrationButton setEnabled:NO];
     dispatch_async(myQueue, ^{
         _objectPoints.resize(_imageCount);
-        double rms =  calibrateCameras( _boardSize,_imagePoints, _objectPoints, _imageCount , _imageSize ,_squareSize);
+        double rms =  calibrateCameras( _boardSize,_imagePoints, _objectPoints, _imageCount , _imageSize, _squareHeight, _squareWidth);
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self.activityIndicator stopAnimating];
             NSString* message = [NSString stringWithFormat:@"Calibration Completed with rms %f" ,rms];
@@ -188,7 +230,7 @@
     cv::cvtColor(_lastFrame, grayFrame, CV_RGB2GRAY);
     _imageSize = grayFrame.size();
 
-    if(StereoCalib(grayFrame ,_boardSize,_imagePoints,_imageCount,cornersImg))
+    if(StereoCalib(grayFrame ,_boardSize,_imagePoints,_imageCount, cornersImg))
     {
         NSData* data = [self dataFromVector: &_imagePoints[0][_imageCount]];
         [_sessionManager sendDataToPeers:NULL WithData:data];
@@ -196,7 +238,6 @@
         NSLog(@"own image count is %d",_imageCount);
     }
     UIImage * corners = ([UIImage imageWithCVMat:cornersImg]);
-    
     
     return  corners;
 
@@ -206,6 +247,7 @@
 - (IBAction)capturePressed:(UIButton *)sender
 {
     [_sessionManager sendClick: self];
+    [NSThread sleepForTimeInterval:self.waitPeriod];
     [self capture];
 }
 

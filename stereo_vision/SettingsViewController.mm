@@ -13,11 +13,12 @@
 @end
 
 @implementation SettingsViewController
+@synthesize squareHeight;
 
 @synthesize scrollView;
 @synthesize boardWidth;
 @synthesize boardHeight;
-@synthesize squareLength;
+@synthesize squareWidth;
 @synthesize R1_1;
 @synthesize R1_2;
 @synthesize R1_3;
@@ -30,39 +31,58 @@
 @synthesize T1_1;
 @synthesize T2_1;
 @synthesize T3_1;
+@synthesize E1_1;
+@synthesize E1_2;
+@synthesize E1_3;
+@synthesize E2_1;
+@synthesize E2_2;
+@synthesize E2_3;
+@synthesize E3_1;
+@synthesize E3_2;
+@synthesize E3_3;
+@synthesize F1_1;
+@synthesize F1_2;
+@synthesize F1_3;
+@synthesize F2_1;
+@synthesize F2_2;
+@synthesize F2_3;
+@synthesize F3_1;
+@synthesize F3_2;
+@synthesize F3_3;
 
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    [self.squareLength setReturnKeyType:UIReturnKeyDone];
+    // setting the UIScrollview dimensions
+    //UIImage *image = [UIImage imageNamed:@"grey_img.jpeg"];
+    //UIImageView *iv = [[UIImageView alloc] initWithImage:image];
+    //[scrollView addSubview:iv];
+    //scrollView.contentSize = iv.bounds.size;
+    
+    [self.squareHeight setReturnKeyType:UIReturnKeyDone];
+    [self.squareWidth setReturnKeyType:UIReturnKeyDone];
     [self.boardWidth setReturnKeyType:UIReturnKeyDone];
     [self.boardHeight setReturnKeyType:UIReturnKeyDone];
-    [self.squareLength setDelegate:self];
+    [self.squareHeight setDelegate:self];
+    [self.squareWidth setDelegate:self];
     [self.boardHeight setDelegate:self];
     [self.boardWidth setDelegate:self];
     
     NSString* boardWidthString = (NSString*) [[NSUserDefaults standardUserDefaults] objectForKey:@"boardWidth"];
     NSString* boardHeightString = (NSString*) [[NSUserDefaults standardUserDefaults] objectForKey:@"boardHeight"];
-    NSString* squareSizeString = (NSString*) [[NSUserDefaults standardUserDefaults] objectForKey:@"squareSize"];
+    NSString* squareHeightString = (NSString*) [[NSUserDefaults standardUserDefaults] objectForKey:@"squareHeight"];
+    NSString* squareWidthString = (NSString*) [[NSUserDefaults standardUserDefaults] objectForKey:@"squareWidth"];
     
     [self.boardWidth setText:boardWidthString];
     [self.boardHeight setText:boardHeightString];
-    [self.squareLength setText:squareSizeString];
+    [self.squareHeight setText:squareHeightString];
+    [self.squareWidth setText:squareWidthString];
     
-    // Do any additional setup after loading the view from its nib.
+    [self.scrollView setContentSize:CGSizeMake(320, 620)];
     
-    [self.scrollView setContentSize:CGSizeMake(320, 900)];
+    // Upload from memory the settings that are stored
     NSMutableArray* RArray = (NSMutableArray*)[[NSUserDefaults standardUserDefaults] objectForKey:@"Rarray"];
     
     NSMutableArray* TArray = (NSMutableArray*)[[NSUserDefaults standardUserDefaults] objectForKey:@"Tarray"];
@@ -93,8 +113,6 @@
         [(UILabel*) [self.scrollView viewWithTag:(i+22)] setText:text];
     }
     
-    
-    
 }
 
 - (void)viewDidUnload
@@ -102,7 +120,6 @@
     [self setScrollView:nil];
     [self setBoardWidth:nil];
     [self setBoardHeight:nil];
-    [self setSquareLength:nil];
     [self setR1_1:nil];
     [self setR1_2:nil];
     [self setR1_3:nil];
@@ -115,6 +132,26 @@
     [self setT1_1:nil];
     [self setT2_1:nil];
     [self setT3_1:nil];
+    [self setE1_1:nil];
+    [self setE1_2:nil];
+    [self setE1_3:nil];
+    [self setE2_1:nil];
+    [self setE2_2:nil];
+    [self setE2_3:nil];
+    [self setE3_1:nil];
+    [self setE3_2:nil];
+    [self setE3_3:nil];
+    [self setF1_1:nil];
+    [self setF1_2:nil];
+    [self setF1_3:nil];
+    [self setF2_1:nil];
+    [self setF2_2:nil];
+    [self setF2_3:nil];
+    [self setF3_1:nil];
+    [self setF3_2:nil];
+    [self setF3_3:nil];
+    [self setSquareWidth:nil];
+    [self setSquareHeight:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -134,12 +171,19 @@
     [[NSUserDefaults standardUserDefaults] setObject: sender.text forKey:@"boardWidth"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
+
 - (IBAction)saveHeight:(UITextField *)sender {
     [[NSUserDefaults standardUserDefaults] setObject: sender.text forKey:@"boardHeight"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
-- (IBAction)saveSquareLength:(UITextField *)sender {
-    [[NSUserDefaults standardUserDefaults] setObject: sender.text forKey:@"squareSize"];
+
+- (IBAction)saveSquareHeight:(UITextField *)sender {
+    [[NSUserDefaults standardUserDefaults] setObject: sender.text forKey:@"squareHeight"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (IBAction)saveSquareWidth:(UITextField *)sender {
+    [[NSUserDefaults standardUserDefaults] setObject: sender.text forKey:@"squareWidth"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

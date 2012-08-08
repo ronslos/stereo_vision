@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "SessionManager.h"
+#import "ResponseFromSession.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <ResponseFromSession>
 
 {
     SessionManager * _sessionManager;
@@ -18,5 +19,7 @@
 - (IBAction)connectPressed;
 - (IBAction)calibratePressed;
 - (IBAction)reconstructPressed;
+
+- (void) endedConnectionPhase;
 
 @end

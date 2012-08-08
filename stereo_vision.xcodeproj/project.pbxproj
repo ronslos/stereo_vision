@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		1763429D15B7FC7A00AAD6E4 /* LibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1763429C15B7FC7A00AAD6E4 /* LibraryViewController.m */; };
+		176342A515B9A23700AAD6E4 /* blue bgi.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 176342A315B9A23700AAD6E4 /* blue bgi.jpeg */; };
+		176342A615B9A23700AAD6E4 /* dark bg.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 176342A415B9A23700AAD6E4 /* dark bg.jpeg */; };
+		176342B115BAE13100AAD6E4 /* bright_bg_img1.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 176342AE15BAE13100AAD6E4 /* bright_bg_img1.jpeg */; };
+		176342B215BAE13100AAD6E4 /* bright_bg_img2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 176342AF15BAE13100AAD6E4 /* bright_bg_img2.jpeg */; };
+		176342B315BAE13100AAD6E4 /* bright_bg_img3.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 176342B015BAE13100AAD6E4 /* bright_bg_img3.jpeg */; };
 		17C6A00415B5B02100372355 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C6A00315B5B02100372355 /* UIKit.framework */; };
 		17C6A00615B5B02100372355 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C6A00515B5B02100372355 /* Foundation.framework */; };
 		17C6A00815B5B02100372355 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C6A00715B5B02100372355 /* CoreGraphics.framework */; };
@@ -51,6 +56,12 @@
 /* Begin PBXFileReference section */
 		1763429B15B7FC7A00AAD6E4 /* LibraryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryViewController.h; sourceTree = "<group>"; };
 		1763429C15B7FC7A00AAD6E4 /* LibraryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryViewController.m; sourceTree = "<group>"; };
+		176342A315B9A23700AAD6E4 /* blue bgi.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "blue bgi.jpeg"; sourceTree = "<group>"; };
+		176342A415B9A23700AAD6E4 /* dark bg.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "dark bg.jpeg"; sourceTree = "<group>"; };
+		176342A715B9ADEC00AAD6E4 /* ResponseFromSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResponseFromSession.h; sourceTree = "<group>"; };
+		176342AE15BAE13100AAD6E4 /* bright_bg_img1.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bright_bg_img1.jpeg; sourceTree = "<group>"; };
+		176342AF15BAE13100AAD6E4 /* bright_bg_img2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bright_bg_img2.jpeg; sourceTree = "<group>"; };
+		176342B015BAE13100AAD6E4 /* bright_bg_img3.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bright_bg_img3.jpeg; sourceTree = "<group>"; };
 		17C69FFF15B5B02100372355 /* stereo_vision.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stereo_vision.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17C6A00315B5B02100372355 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		17C6A00515B5B02100372355 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -197,16 +208,13 @@
 				17C6A03415B5C67200372355 /* manageCVMat.mm */,
 				17C6A03515B5C67200372355 /* SessionManager.h */,
 				17C6A03615B5C67200372355 /* SessionManager.mm */,
+				176342A715B9ADEC00AAD6E4 /* ResponseFromSession.h */,
 				17C6A03715B5C67200372355 /* UIImage+OpenCV.h */,
 				17C6A03815B5C67200372355 /* UIImage+OpenCV.mm */,
 				17C6A02C15B5BD7900372355 /* SettingsViewController.h */,
 				17C6A02D15B5BD7900372355 /* SettingsViewController.mm */,
 				17C6A02915B5B83500372355 /* CalibrationViewClontroller.h */,
 				17C6A02A15B5B83500372355 /* CalibrationViewConroller.mm */,
-				17C6A02715B5B78B00372355 /* 3dscanner.png */,
-				17C6A02515B5B6EC00372355 /* Clouds.JPG */,
-				17C6A01215B5B02100372355 /* AppDelegate.h */,
-				17C6A01315B5B02100372355 /* AppDelegate.m */,
 				17C6A01515B5B02100372355 /* MainStoryboard.storyboard */,
 				1763429B15B7FC7A00AAD6E4 /* LibraryViewController.h */,
 				1763429C15B7FC7A00AAD6E4 /* LibraryViewController.m */,
@@ -220,10 +228,19 @@
 		17C6A00A15B5B02100372355 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				17C6A01215B5B02100372355 /* AppDelegate.h */,
+				17C6A01315B5B02100372355 /* AppDelegate.m */,
 				17C6A00B15B5B02100372355 /* stereo_vision-Info.plist */,
 				17C6A00C15B5B02100372355 /* InfoPlist.strings */,
 				17C6A00F15B5B02100372355 /* main.m */,
 				17C6A01115B5B02100372355 /* stereo_vision-Prefix.pch */,
+				17C6A02715B5B78B00372355 /* 3dscanner.png */,
+				176342AE15BAE13100AAD6E4 /* bright_bg_img1.jpeg */,
+				176342AF15BAE13100AAD6E4 /* bright_bg_img2.jpeg */,
+				176342B015BAE13100AAD6E4 /* bright_bg_img3.jpeg */,
+				176342A315B9A23700AAD6E4 /* blue bgi.jpeg */,
+				176342A415B9A23700AAD6E4 /* dark bg.jpeg */,
+				17C6A02515B5B6EC00372355 /* Clouds.JPG */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -282,6 +299,11 @@
 				17C6A01715B5B02100372355 /* MainStoryboard.storyboard in Resources */,
 				17C6A02615B5B6EC00372355 /* Clouds.JPG in Resources */,
 				17C6A02815B5B78B00372355 /* 3dscanner.png in Resources */,
+				176342A515B9A23700AAD6E4 /* blue bgi.jpeg in Resources */,
+				176342A615B9A23700AAD6E4 /* dark bg.jpeg in Resources */,
+				176342B115BAE13100AAD6E4 /* bright_bg_img1.jpeg in Resources */,
+				176342B215BAE13100AAD6E4 /* bright_bg_img2.jpeg in Resources */,
+				176342B315BAE13100AAD6E4 /* bright_bg_img3.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,4 +10,6 @@
 
 @interface LibraryViewController : UITableViewController
 
+@property (nonatomic, strong) NSArray *pictures;
+
 @end

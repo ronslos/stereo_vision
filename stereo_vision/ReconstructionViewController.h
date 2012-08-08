@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SessionManager.h"
 
-@interface ReconstructionViewController : UIViewController
+@interface ReconstructionViewController : UIViewController <GKPeerPickerControllerDelegate>
+{
+    SessionManager* _sessionManager;
+}
+
+@property (nonatomic) double waitPeriod;
 
 @end

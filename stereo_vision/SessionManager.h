@@ -10,6 +10,7 @@
 
 #import <UIKit/UIKit.h>
 #import <GameKit/GameKit.h>
+#import "ResponseFromSession.h"
 
 @interface SessionManager : NSObject <GKSessionDelegate, GKPeerPickerControllerDelegate>
 {
@@ -19,10 +20,12 @@
     GKPeerPickerController *peerPicker;
     // Array of peers connected
     NSMutableArray *peers;
-
+    int _count;
+    int _gapCount;
 }
 
 @property (nonatomic, strong) GKSession *mySession;
+@property (nonatomic, weak) id<ResponseFromSession> viewDelegate;
 
    // Methods to connect and send data
 - (void) sendDataToPeers:(id) sender WithData:(NSData*) data ;
@@ -31,6 +34,7 @@
 - (void) sendClick: (id) sender;
 - (void) sendMoveToCalibration: (id) sender;
 - (void) sendMoveToReconstruction: (id) sender;
-+ (BOOL) isInitialized;
+- (void) sendCalculateTimeDelay;
+- (void) sendCalculateTimeDelayResponse;
 
 @end

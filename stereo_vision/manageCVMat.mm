@@ -30,7 +30,7 @@
 +(cv::Mat) loadCVMat: (cv::Size) size  WithKey: (NSString*) key {
     
     cv::Mat result;
-    result.at<double>(1, 2) = 4;
+    // result.at<double>(1, 2) = 4;
     NSMutableArray* matArray = (NSMutableArray*) [[NSUserDefaults standardUserDefaults] objectForKey:key];
     for (int i=0 ; i< size.width * size.height; i++)
     {

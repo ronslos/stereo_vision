@@ -20,7 +20,8 @@
     cv::vector<cv::vector<cv::Point3f> > _objectPoints;
     cv::Size _boardSize;
     cv::Size _imageSize;
-    float _squareSize;
+    float _squareHeight;
+    float _squareWidth;
     int _imageCount;
     int _otherImageCount;
     bool _notCapturing;
@@ -31,6 +32,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *calibrationButton;
 @property (weak, nonatomic) IBOutlet UIButton *captureBtn;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+
+@property (nonatomic) double waitPeriod;
 
 - (IBAction)Calibrate:(UIButton *)sender;
 - (IBAction)capturePressed:(UIButton *)sender;

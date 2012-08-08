@@ -14,6 +14,8 @@
 
 @implementation LibraryViewController
 
+@synthesize pictures = _pictures;
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -21,6 +23,15 @@
         // Custom initialization
     }
     return self;
+}
+
+// Override default setter of pictures to enable reloading of the table
+- (void) setPictures:(NSArray *)pictures
+{
+    if (_pictures != pictures) {
+        _pictures = pictures;
+        [self.tableView reloadData];
+    }
 }
 
 - (void)viewDidLoad
@@ -50,24 +61,31 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    // ********** need to generate num_of_cells = num of photos inside the album ***********
+    //return [self.pictures count];
+    return 10;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"Single Image Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Single Image Cell"];
+    }
     // Configure the cell...
+    // ***************** need to edit the attributes of the cell according to the releavant image **
+    //id picture = [self.pictures objectAtIndex:indexPath.row];
+    cell.textLabel.text = @"check";
+    cell.detailTextLabel.text = @"check sub label";
     
     return cell;
 }
@@ -115,13 +133,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    // ******** navigation code before showing the picture ************
+    //id picture = [self.pictures objectAtIndex:indexPath.row];
 }
 
 @end

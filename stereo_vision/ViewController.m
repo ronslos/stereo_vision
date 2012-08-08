@@ -11,14 +11,21 @@
 
 @interface ViewController () <GKPeerPickerControllerDelegate>
 
+@property (nonatomic) BOOL isConnected;
+
 @end
 
 @implementation ViewController
+
+@synthesize isConnected = _isConnected;
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    self.isConnected = NO;
+
 }
 
 - (void)viewDidUnload
@@ -27,41 +34,70 @@
     // Release any retained subviews of the main view.
 }
 
+/*
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    //
+    
+     
 }
+ */
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    return NO;
 }
 
-- (IBAction)connectPressed {
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    if (self.isConnected) {
+        _sessionManager = [SessionManager instance];
+        [[_sessionManager mySession ] setDataReceiveHandler:self withContext:nil];
+    }
+}
+
+
+- (IBAction)connectPressed 
+{
     _sessionManager = [SessionManager instance];
+    _sessionManager.viewDelegate = self;
     [_sessionManager initializeSession];
 }
 
+- (void) endedConnectionPhase
+{
+        [[_sessionManager mySession ] setDataReceiveHandler:self withContext:nil];
+        self.isConnected = YES;
+        
+}
+
 - (IBAction)calibratePressed {
-    // move other phone to calibration as well, and connect phones if needed
-    if (![SessionManager isInitialized]) {
-        // initialize session
-        _sessionManager = [SessionManager instance];
-        [_sessionManager initializeSession];
+    
+    // move both iPhones to calibration , only if connected
+    if (self.isConnected) {
+        [_sessionManager sendMoveToCalibration:self];
+        [self performSegueWithIdentifier:@"moveToCalibrate" sender:self];
     }
-    [_sessionManager sendMoveToCalibration:self];
-    [self performSegueWithIdentifier:@"moveToCalibrate" sender:self];
+    else {
+        NSString *str = [NSString stringWithFormat:@"Need to connect iPhones before starting calibration"]; 
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:str delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[alert show];
+    }
+    
 }
 
 - (IBAction)reconstructPressed {
-    // move other phone to reconstruction as well, and connect phones if needed
-    if (![SessionManager isInitialized]) {
-        // initialize session
-        _sessionManager = [SessionManager instance];
-        [_sessionManager initializeSession];
+    
+    // move both iPhones to reconstruction , only if connected
+    if (self.isConnected) {
+        [_sessionManager sendMoveToReconstruction:self];
+        [self performSegueWithIdentifier:@"moveToReconstruction" sender:self];
     }
-    [_sessionManager sendMoveToReconstruction:self];
-    [self performSegueWithIdentifier:@"moveToReconstruction" sender:self];
+    else {
+        NSString *str = [NSString stringWithFormat:@"Need to connect iPhones before starting reconstruction"]; 
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:str delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[alert show];
+    }
     
 }
 
@@ -73,11 +109,21 @@
     NSString *whatDidIget = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
     if(![whatDidIget caseInsensitiveCompare:@"move to calibration"])
     {
-        [self calibratePressed];
+        [self performSegueWithIdentifier:@"moveToCalibrate" sender:self];
     }
     else if (![whatDidIget caseInsensitiveCompare:@"move to reconstruction"])
     {
-        [self reconstructPressed];
+        [self performSegueWithIdentifier:@"moveToReconstruction" sender:self];
+    }
+    else if (![whatDidIget caseInsensitiveCompare:@"calculate time delay"])
+    {
+    }
+    else if (![whatDidIget caseInsensitiveCompare:@"calculate time delay response"])
+    {
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unexpected message" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[alert show];
     }
 }
 
