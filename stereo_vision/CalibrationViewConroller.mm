@@ -66,7 +66,7 @@
     }
     int boardHeight;
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"boardHeight"] != NULL) {
-        boardWidth = [(NSString*)[[NSUserDefaults standardUserDefaults] objectForKey:@"boardHeight"] intValue];
+        boardHeight = [(NSString*)[[NSUserDefaults standardUserDefaults] objectForKey:@"boardHeight"] intValue];
     }
     else {
         boardHeight = 6; // set to default number of internal corners along chessboard Height
@@ -142,6 +142,15 @@
     delete _videoCapture;
     _videoCapture = nil;
     _captureBtn = nil;
+}
+
+-(void) viewWillDisappear:(BOOL)animated {
+    if ([self.navigationController.viewControllers indexOfObject:self]==NSNotFound) {
+        // back button was pressed.  We know this is true because self is no longer
+        // in the navigation stack.  
+        [_sessionManager sendMoveBackToMenu];
+    }
+    [super viewWillDisappear:animated];
 }
 
 /*
@@ -235,7 +244,7 @@
         NSData* data = [self dataFromVector: &_imagePoints[0][_imageCount]];
         [_sessionManager sendDataToPeers:NULL WithData:data];
         _imageCount++;
-        NSLog(@"own image count is %d",_imageCount);
+        // NSLog(@"own image count is %d",_imageCount); // debug
     }
     UIImage * corners = ([UIImage imageWithCVMat:cornersImg]);
     
@@ -292,11 +301,15 @@
     {
         [self capture];
     }
+    else if (![whatDidIget caseInsensitiveCompare:@"move to menu"])
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
     else
     {
         [self fillVectorFromData:data :&(_imagePoints[1][_otherImageCount]) ];
         _otherImageCount ++ ; 
-        NSLog(@"Other image count is %d",_otherImageCount);
+        // NSLog(@"Other image count is %d",_otherImageCount); // debug
     }
 }
 

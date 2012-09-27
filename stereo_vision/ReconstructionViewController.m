@@ -43,13 +43,25 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+-(void) viewWillDisappear:(BOOL)animated {
+    if ([self.navigationController.viewControllers indexOfObject:self]==NSNotFound) {
+        // back button was pressed.  We know this is true because self is no longer
+        // in the navigation stack.  
+        [_sessionManager sendMoveBackToMenu];
+    }
+    [super viewWillDisappear:animated];
+}
 
 #pragma mark -
 #pragma mark GKPeerPickerControllerDelegate
 
 - (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context
 {   
-    //NSString *whatDidIget = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+    NSString *whatDidIget = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+    if (![whatDidIget caseInsensitiveCompare:@"move to menu"])
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 @end

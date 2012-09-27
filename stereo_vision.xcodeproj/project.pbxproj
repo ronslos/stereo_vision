@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		174F3E8A15D44BF9007B7A62 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 174F3E8915D44BF8007B7A62 /* QuartzCore.framework */; };
 		1763429D15B7FC7A00AAD6E4 /* LibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1763429C15B7FC7A00AAD6E4 /* LibraryViewController.m */; };
 		176342A515B9A23700AAD6E4 /* blue bgi.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 176342A315B9A23700AAD6E4 /* blue bgi.jpeg */; };
 		176342A615B9A23700AAD6E4 /* dark bg.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 176342A415B9A23700AAD6E4 /* dark bg.jpeg */; };
@@ -54,6 +55,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		174F3E8915D44BF8007B7A62 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		1763429B15B7FC7A00AAD6E4 /* LibraryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryViewController.h; sourceTree = "<group>"; };
 		1763429C15B7FC7A00AAD6E4 /* LibraryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryViewController.m; sourceTree = "<group>"; };
 		176342A315B9A23700AAD6E4 /* blue bgi.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "blue bgi.jpeg"; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				174F3E8A15D44BF9007B7A62 /* QuartzCore.framework in Frameworks */,
 				17C6A0E215B5F3BF00372355 /* AVFoundation.framework in Frameworks */,
 				17C6A0DF15B5F3B600372355 /* CoreMedia.framework in Frameworks */,
 				17C6A0E015B5F3B600372355 /* CoreVideo.framework in Frameworks */,
@@ -169,6 +172,7 @@
 		17C6A00215B5B02100372355 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				174F3E8915D44BF8007B7A62 /* QuartzCore.framework */,
 				17C6A0E115B5F3BF00372355 /* AVFoundation.framework */,
 				17C6A0DD15B5F3B600372355 /* CoreMedia.framework */,
 				17C6A0DE15B5F3B600372355 /* CoreVideo.framework */,

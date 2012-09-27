@@ -19,7 +19,7 @@
     NSNumber* matElemnt;
     for (int i=0 ; i< matRows * matCols; i++)
     {
-        matElemnt = [NSNumber numberWithDouble:mat.at<double>(i/matCols,i%matRows)];
+        matElemnt = [NSNumber numberWithDouble:mat.at<double>(i/matCols,i%matCols)];
         [matArray insertObject:matElemnt atIndex:i];
     }
     [[NSUserDefaults standardUserDefaults] setObject:matArray forKey:key];
@@ -29,12 +29,13 @@
 
 +(cv::Mat) loadCVMat: (cv::Size) size  WithKey: (NSString*) key {
     
-    cv::Mat result;
-    // result.at<double>(1, 2) = 4;
+    cv::Mat result = cv::Mat::eye(size.height, size.width, CV_64F);;
     NSMutableArray* matArray = (NSMutableArray*) [[NSUserDefaults standardUserDefaults] objectForKey:key];
+    // NSLog(@"array values are %@", matArray); // debug
     for (int i=0 ; i< size.width * size.height; i++)
     {
-        result.at<double>(i/size.width,i%size.height) = [(NSNumber*)[matArray objectAtIndex:i ] doubleValue];
+        result.at<double>(i/size.width,i%size.width) = [(NSNumber*)[matArray objectAtIndex:i ] doubleValue];
+        // NSLog(@"value of cv::Mat at location %d %d is : %f", i/size.width, i%size.width, result.at<double>(i/size.width,i%size.width)); // debug
     }
     
     return result;

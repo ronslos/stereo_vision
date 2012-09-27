@@ -10,9 +10,12 @@
 
 @interface SessionManager ()
 
-@property (nonatomic) NSDate * start;
-@property (nonatomic) NSTimeInterval interval;
-@property (nonatomic) NSTimeInterval totalTime;
+//@property (nonatomic) NSDate * start;
+//@property (nonatomic) NSTimeInterval interval;
+//@property (nonatomic) NSTimeInterval totalTime;
+@property (nonatomic) double start;
+@property (nonatomic) double interval;
+@property (nonatomic) double totalTime;
 
 @end
 
@@ -71,10 +74,17 @@ static SessionManager *gInstance = NULL;
 	[mySession sendDataToAllPeers:[str dataUsingEncoding: NSASCIIStringEncoding] withDataMode:GKSendDataReliable error:nil];
 }
 
+- (void) sendMoveBackToMenu
+{
+    NSString *str = @"move to menu";
+	[mySession sendDataToAllPeers:[str dataUsingEncoding: NSASCIIStringEncoding] withDataMode:GKSendDataReliable error:nil];
+}
+
 - (void) sendCalculateTimeDelay
 {
     // prepare for sending timestamp message
-    self.start = [NSDate date];
+    // self.start = [NSDate date]
+    self.start = CACurrentMediaTime();
     
     NSString *str = @"calculate time delay";
 	[mySession sendDataToAllPeers:[str dataUsingEncoding: NSASCIIStringEncoding] withDataMode:GKSendDataReliable error:nil];
@@ -126,8 +136,9 @@ static SessionManager *gInstance = NULL;
     }
     else if (![whatDidIget caseInsensitiveCompare:@"calculate time delay response"])
     {
-        self.interval = [self.start timeIntervalSinceNow];
-        self.totalTime += self.interval;
+        //self.interval = [self.start timeIntervalSinceNow];
+        self.interval = CACurrentMediaTime();
+        self.totalTime += (self.interval-self.start);
         _count++;
         if (_count == 5) {
             if ([self.viewDelegate respondsToSelector:@selector(endedConnectionPhase)]){
@@ -138,7 +149,7 @@ static SessionManager *gInstance = NULL;
             [[NSUserDefaults standardUserDefaults] setObject:delay forKey:@"timeDelay"];
             [[NSUserDefaults standardUserDefaults] synchronize];
             
-            NSString *str = [NSString stringWithFormat:@"Connected with time delay of %f", (self.totalTime/2)];
+            NSString *str = [NSString stringWithFormat:@"with time delay of %f", (self.totalTime/2)];
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Connected" message:str delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alert show];
         }
@@ -177,6 +188,7 @@ static SessionManager *gInstance = NULL;
         _count = 0;
         _gapCount = 0;
 		self.totalTime = 0;
+        [NSThread sleepForTimeInterval:1];
         [self sendCalculateTimeDelay];
         
         /*

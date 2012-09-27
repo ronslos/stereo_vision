@@ -79,8 +79,8 @@
         [self performSegueWithIdentifier:@"moveToCalibrate" sender:self];
     }
     else {
-        NSString *str = [NSString stringWithFormat:@"Need to connect iPhones before starting calibration"]; 
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:str delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        NSString *str = [NSString stringWithFormat:@"You need to connect the devices before starting calibration"]; 
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wait ..." message:str delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
     }
     
@@ -94,8 +94,8 @@
         [self performSegueWithIdentifier:@"moveToReconstruction" sender:self];
     }
     else {
-        NSString *str = [NSString stringWithFormat:@"Need to connect iPhones before starting reconstruction"]; 
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:str delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        NSString *str = [NSString stringWithFormat:@"You need to connect the devices before starting reconstruction"]; 
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wait ..." message:str delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
     }
     
@@ -117,8 +117,12 @@
     }
     else if (![whatDidIget caseInsensitiveCompare:@"calculate time delay"])
     {
+        [_sessionManager sendCalculateTimeDelayResponse];
     }
     else if (![whatDidIget caseInsensitiveCompare:@"calculate time delay response"])
+    {
+    }
+    else if (![whatDidIget caseInsensitiveCompare:@"move to menu"])
     {
     }
     else {

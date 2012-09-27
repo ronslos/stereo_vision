@@ -10,6 +10,7 @@
 
 #import <UIKit/UIKit.h>
 #import <GameKit/GameKit.h>
+#import <QuartzCore/CAAnimation.h>
 #import "ResponseFromSession.h"
 
 @interface SessionManager : NSObject <GKSessionDelegate, GKPeerPickerControllerDelegate>
@@ -36,5 +37,6 @@
 - (void) sendMoveToReconstruction: (id) sender;
 - (void) sendCalculateTimeDelay;
 - (void) sendCalculateTimeDelayResponse;
+- (void) sendMoveBackToMenu;
 
 @end
