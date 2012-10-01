@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ImageViewController.h"
 
 @interface LibraryViewController : UITableViewController
 
-@property (nonatomic, strong) NSArray *pictures;
+@property (nonatomic, strong) NSMutableArray *pictures;
 
 @end

@@ -8,8 +8,12 @@
 
 #import "UIImage+OpenCV.h"
 #import <UIKit/UIKit.h>
+#import "SessionManager.h"
 
-@interface SettingsViewController : UIViewController <UITextFieldDelegate>
+@interface SettingsViewController : UIViewController <UITextFieldDelegate, GKPeerPickerControllerDelegate>
+{
+    SessionManager* _sessionManager;
+}
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 - (IBAction)saveWidth:(UITextField *)sender;

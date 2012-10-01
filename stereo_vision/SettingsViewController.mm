@@ -14,7 +14,6 @@
 
 @implementation SettingsViewController
 @synthesize squareHeight;
-
 @synthesize scrollView;
 @synthesize boardWidth;
 @synthesize boardHeight;
@@ -60,6 +59,12 @@
     //UIImageView *iv = [[UIImageView alloc] initWithImage:image];
     //[scrollView addSubview:iv];
     //scrollView.contentSize = iv.bounds.size;
+    
+    _sessionManager = [SessionManager instance];
+    if (_sessionManager.mySession != NULL)
+    {
+        [[_sessionManager mySession ] setDataReceiveHandler:self withContext:nil];
+    }
     
     [self.squareHeight setReturnKeyType:UIReturnKeyDone];
     [self.squareWidth setReturnKeyType:UIReturnKeyDone];
@@ -162,6 +167,18 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+-(void) viewWillDisappear:(BOOL)animated {
+    if ([self.navigationController.viewControllers indexOfObject:self]==NSNotFound) {
+        // back button was pressed.  We know this is true because self is no longer
+        // in the navigation stack.  
+        if (_sessionManager.mySession != NULL) {
+            [_sessionManager sendMoveBackToMenu];
+        }
+    }
+    [super viewWillDisappear:animated];
+}
+
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return NO;
@@ -170,21 +187,83 @@
 - (IBAction)saveWidth:(UITextField *)sender {
     [[NSUserDefaults standardUserDefaults] setObject: sender.text forKey:@"boardWidth"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    if (_sessionManager.mySession != NULL) {
+        // send new board width data to other device
+        [_sessionManager settingsUpdate:@"boardWidth:" withValue:sender.text];
+    }
 }
 
 - (IBAction)saveHeight:(UITextField *)sender {
     [[NSUserDefaults standardUserDefaults] setObject: sender.text forKey:@"boardHeight"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    if (_sessionManager.mySession != NULL) {
+        // send new board height data to other device
+        [_sessionManager settingsUpdate:@"boardHeight:" withValue:sender.text];
+    }
 }
 
 - (IBAction)saveSquareHeight:(UITextField *)sender {
     [[NSUserDefaults standardUserDefaults] setObject: sender.text forKey:@"squareHeight"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    if (_sessionManager.mySession != NULL) {
+        // send new square height data to other device
+        [_sessionManager settingsUpdate:@"squareHeight:" withValue:sender.text];
+    }
+
 }
 
 - (IBAction)saveSquareWidth:(UITextField *)sender {
     [[NSUserDefaults standardUserDefaults] setObject: sender.text forKey:@"squareWidth"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    if (_sessionManager.mySession != NULL) {
+        // send new square width data to other device
+        [_sessionManager settingsUpdate:@"squareWidth:" withValue:sender.text];
+    }
+
+}
+
+#pragma mark -
+#pragma mark GKPeerPickerControllerDelegate
+
+- (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context
+{   
+    NSString *whatDidIget = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+    if (![whatDidIget caseInsensitiveCompare:@"move to menu"])
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    else if ([whatDidIget hasPrefix:@"boardWidth:"])
+    {
+        NSString* value = [whatDidIget substringFromIndex:11];
+        NSLog(@"value is %d", [value integerValue]); // debug
+        [[NSUserDefaults standardUserDefaults] setObject: value forKey:@"boardWidth"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [self.boardWidth setText:value]; 
+    }
+    else if ([whatDidIget hasPrefix:@"boardHeight:"])
+    {
+        NSString* value = [whatDidIget substringFromIndex:12];
+        NSLog(@"value is %d", [value intValue]); // debug
+        [[NSUserDefaults standardUserDefaults] setObject: value forKey:@"boardHeight"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [self.boardHeight setText:value]; 
+    }
+    else if ([whatDidIget hasPrefix:@"squareHeight:"])
+    {
+        NSString* value = [whatDidIget substringFromIndex:13];
+        NSLog(@"value is %d", [value integerValue]); // debug
+        [[NSUserDefaults standardUserDefaults] setObject: value forKey:@"squareHeight"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [self.squareHeight setText:value]; 
+    }
+    else if ([whatDidIget hasPrefix:@"squareWidth:"])
+    {
+        NSString* value = [whatDidIget substringFromIndex:12];
+        NSLog(@"value is %d", [value integerValue]); // debug
+        [[NSUserDefaults standardUserDefaults] setObject: value forKey:@"squareWidth"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [self.squareWidth setText:value]; 
+    }
 }
 
 @end

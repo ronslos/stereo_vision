@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11E53" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="dky-Gc-Wab">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2549" systemVersion="12C54" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="dky-Gc-Wab">
     <dependencies>
-        <deployment defaultVersion="1296" identifier="iOS"/>
-        <development defaultVersion="4200" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1181"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1498"/>
     </dependencies>
     <scenes>
         <!--View Controller - Main Menu-->
@@ -45,7 +43,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="USo-R2-8XB" kind="push" identifier="moveToSettings" id="XE0-zO-5sf"/>
+                                    <action selector="settingsPressed" destination="2" eventType="touchUpInside" id="LDL-Fb-Z4D"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="9UQ-iI-vRA">
@@ -116,6 +114,7 @@
                     <connections>
                         <segue destination="DMn-qd-0fy" kind="push" identifier="moveToCalibrate" id="k1g-IM-a3c"/>
                         <segue destination="RhT-IB-rJm" kind="push" identifier="moveToReconstruction" id="n64-m3-N0U"/>
+                        <segue destination="USo-R2-8XB" kind="push" identifier="moveToSettings" id="VCL-40-qAL"/>
                     </connections>
                 </viewController>
             </objects>
@@ -129,11 +128,45 @@
                     <view key="view" contentMode="scaleToFill" id="SnB-rY-3w4">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="n91-0F-Gix">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Bp8-F7-zc3">
+                                <rect key="frame" x="112" y="359" width="96" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Capture">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="capturePressed:" destination="RhT-IB-rJm" eventType="touchUpInside" id="xsn-rG-CSK"/>
+                                </connections>
+                            </button>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="lbb-Yn-4in">
+                                <rect key="frame" x="112" y="303" width="96" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="High"/>
+                                    <segment title="Low"/>
+                                </segments>
+                            </segmentedControl>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Reconstruction" id="luZ-tM-YhM">
                         <barButtonItem key="backBarButtonItem" title="Main Menu" id="dBf-gi-MMy"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="captureBtn" destination="Bp8-F7-zc3" id="MJA-1N-Tb5"/>
+                        <outlet property="imageView" destination="n91-0F-Gix" id="vbF-AR-Qke"/>
+                        <outlet property="pickAlg" destination="lbb-Yn-4in" id="wXe-4D-1i2"/>
+                    </connections>
                 </viewController>
             </objects>
             <point key="canvasLocation" x="1437" y="441"/>
@@ -172,6 +205,9 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <connections>
+                                    <segue destination="nQk-Oo-2BY" kind="push" identifier="moveToImage" id="UhT-gW-y1x"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -179,19 +215,18 @@
                             <outlet property="delegate" destination="gk9-AZ-CGC" id="W5b-78-9vV"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="3D Photo Album" id="6QV-4z-4Ky"/>
-                    <connections>
-                        <segue destination="nQk-Oo-2BY" kind="push" identifier="moveToImage" id="CCS-ir-w9T"/>
-                    </connections>
+                    <navigationItem key="navigationItem" title="3D Photo Album" id="6QV-4z-4Ky">
+                        <barButtonItem key="backBarButtonItem" title="Main Menu" id="4O1-su-Ayj"/>
+                    </navigationItem>
                 </tableViewController>
             </objects>
             <point key="canvasLocation" x="1437" y="-805"/>
         </scene>
-        <!--View Controller - Image View-->
+        <!--Image View Controller - Image View-->
         <scene sceneID="BfV-1L-Iaf">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NhJ-qq-wUh" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController title="Image View" id="nQk-Oo-2BY" sceneMemberID="viewController">
+                <viewController title="Image View" id="nQk-Oo-2BY" customClass="ImageViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zzD-mC-li6">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -203,7 +238,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Selected Image" id="r8K-bg-ziL"/>
+                    <navigationItem key="navigationItem" title="Selected Image" id="r8K-bg-ziL">
+                        <barButtonItem key="backBarButtonItem" title="3D Photo Album" id="ULG-bG-hUr"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="imageView" destination="ZV6-LT-zYx" id="4JA-Kq-TSS"/>
+                    </connections>
                 </viewController>
             </objects>
             <point key="canvasLocation" x="1911" y="-1023"/>
@@ -229,7 +269,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Square Height [mm]" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="xoI-Zp-kjy">
-                                <rect key="frame" x="20" y="102" width="155" height="21"/>
+                                <rect key="frame" x="20" y="143" width="155" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -555,7 +595,7 @@
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="GCz-Ls-7tv">
-                                <rect key="frame" x="203" y="97" width="97" height="31"/>
+                                <rect key="frame" x="203" y="138" width="97" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
@@ -564,14 +604,14 @@
                                 </connections>
                             </textField>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Square Width [mm]" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="sfi-C2-Mdb">
-                                <rect key="frame" x="20" y="142" width="155" height="21"/>
+                                <rect key="frame" x="20" y="102" width="155" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="aty-3P-GXX">
-                                <rect key="frame" x="203" y="137" width="97" height="31"/>
+                                <rect key="frame" x="203" y="97" width="97" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "1.0">
+   <FileBreakpoints>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "stereo_vision/ReconstructionViewController.mm"
+         timestampString = "370789878.722756"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "241"
+         endingLineNumber = "241"
+         landmarkName = "-saveImage:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "stereo_vision/File.mm"
+         timestampString = "370806227.287284"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "247"
+         endingLineNumber = "247"
+         landmarkName = "reconstruct(cv::Size imageSize , cv::Mat* img1 , cv::Mat* img2 ,cv::Mat* outImg,cv::Mat &amp;map11 , cv::Mat &amp;map12 , cv::Mat &amp;map21 , cv::Mat &amp;map22 ,cv::Rect &amp;roi1 , cv::Rect &amp;roi2 , cv::Mat &amp;Q, int algType)"
+         landmarkType = "7">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "stereo_vision/File.mm"
+         timestampString = "370796305.310193"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "116"
+         endingLineNumber = "116"
+         landmarkName = "calibrateCameras( cv::Size boardSize,cv::vector&lt;cv::vector&lt;cv::Point2f&gt; &gt;(&amp; imagePoints)[2], cv::vector&lt;cv::vector&lt;cv::Point3f&gt; &gt;&amp; objectPoints, int numImage , cv::Size imageSize , const float squareHeight, float squareWidth)"
+         landmarkType = "7">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "stereo_vision/File.mm"
+         timestampString = "370796306.371079"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "117"
+         endingLineNumber = "117"
+         landmarkName = "calibrateCameras( cv::Size boardSize,cv::vector&lt;cv::vector&lt;cv::Point2f&gt; &gt;(&amp; imagePoints)[2], cv::vector&lt;cv::vector&lt;cv::Point3f&gt; &gt;&amp; objectPoints, int numImage , cv::Size imageSize , const float squareHeight, float squareWidth)"
+         landmarkType = "7">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "stereo_vision/File.mm"
+         timestampString = "370796653.98452"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "118"
+         endingLineNumber = "118"
+         landmarkName = "calibrateCameras( cv::Size boardSize,cv::vector&lt;cv::vector&lt;cv::Point2f&gt; &gt;(&amp; imagePoints)[2], cv::vector&lt;cv::vector&lt;cv::Point3f&gt; &gt;&amp; objectPoints, int numImage , cv::Size imageSize , const float squareHeight, float squareWidth)"
+         landmarkType = "7">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "stereo_vision/File.mm"
+         timestampString = "370806227.287284"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "255"
+         endingLineNumber = "255"
+         landmarkName = "reconstruct(cv::Size imageSize , cv::Mat* img1 , cv::Mat* img2 ,cv::Mat* outImg,cv::Mat &amp;map11 , cv::Mat &amp;map12 , cv::Mat &amp;map21 , cv::Mat &amp;map22 ,cv::Rect &amp;roi1 , cv::Rect &amp;roi2 , cv::Mat &amp;Q, int algType)"
+         landmarkType = "7">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "stereo_vision/File.mm"
+         timestampString = "370806394.60642"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "256"
+         endingLineNumber = "256"
+         landmarkName = "reconstruct(cv::Size imageSize , cv::Mat* img1 , cv::Mat* img2 ,cv::Mat* outImg,cv::Mat &amp;map11 , cv::Mat &amp;map12 , cv::Mat &amp;map21 , cv::Mat &amp;map22 ,cv::Rect &amp;roi1 , cv::Rect &amp;roi2 , cv::Mat &amp;Q, int algType)"
+         landmarkType = "7">
+      </FileBreakpoint>
+   </FileBreakpoints>
+</Bucket>

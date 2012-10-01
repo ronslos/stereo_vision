@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 ronslos@gmail.com. All rights reserved.
 //
 
+#ifndef calibrationviewcontroller_h_
+#define calibrationviewcontroller_h_
+
 #include "File.h"
 #import "SessionManager.h"
 #import <AVFoundation/AVCaptureDevice.h>
@@ -32,7 +35,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *calibrationButton;
 @property (weak, nonatomic) IBOutlet UIButton *captureBtn;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-
 @property (nonatomic) double waitPeriod;
 
 - (IBAction)Calibrate:(UIButton *)sender;
@@ -42,3 +44,5 @@
 - (void) showCaptureOnScreen;
 
 @end
+
+#endif

@@ -74,6 +74,12 @@ static SessionManager *gInstance = NULL;
 	[mySession sendDataToAllPeers:[str dataUsingEncoding: NSASCIIStringEncoding] withDataMode:GKSendDataReliable error:nil];
 }
 
+- (void) sendMoveToSettings: (id) sender
+{
+    NSString *str = @"move to settings";
+	[mySession sendDataToAllPeers:[str dataUsingEncoding: NSASCIIStringEncoding] withDataMode:GKSendDataReliable error:nil];
+}
+
 - (void) sendMoveBackToMenu
 {
     NSString *str = @"move to menu";
@@ -94,6 +100,13 @@ static SessionManager *gInstance = NULL;
 {
     NSString *str = @"calculate time delay response";
 	[mySession sendDataToAllPeers:[str dataUsingEncoding: NSASCIIStringEncoding] withDataMode:GKSendDataReliable error:nil];
+}
+
+- (void) settingsUpdate: (NSString*) field withValue: (NSString*) value
+{
+    NSString* str = field;
+    str = [str stringByAppendingString:value];
+    [mySession sendDataToAllPeers:[str dataUsingEncoding: NSASCIIStringEncoding] withDataMode:GKSendDataReliable error:nil];
 }
 
 #pragma mark -

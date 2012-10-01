@@ -6,12 +6,17 @@
 //  Copyright (c) 2012 ronslos@gmail.com. All rights reserved.
 //
 
-#import "File.h"
+#ifndef manageCVmat_h_
+#define manageCVmat_h_
+
 #import <Foundation/Foundation.h>
+#import "File.h"
 
 @interface manageCVMat : NSObject
 
-+(void) storeCVMat: (cv::Mat) mat withKey: (NSString*) key;
-+(cv::Mat) loadCVMat: (cv::Size) size  WithKey: (NSString*) key;
++ (void) storeCVMat: (cv::Mat) mat withKey: (NSString*) key;
++ (cv::Mat*) loadCVMat: (cv::Size) size  WithKey: (NSString*) key;
 
 @end
+
+#endif

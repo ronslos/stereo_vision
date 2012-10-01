@@ -12,15 +12,20 @@
 //  appreciated but not required.
 //
 
+#ifndef uiimage_h_
+#define uiimage_h_
+
 #import "File.h"
 #import <UIKit/UIKit.h>
 
 @interface UIImage (UIImage_OpenCV)
 
-+(UIImage *)imageWithCVMat:(const cv::Mat&)cvMat;
--(id)initWithCVMat:(const cv::Mat&)cvMat;
++ (UIImage *)imageWithCVMat:(const cv::Mat&)cvMat;
+- (id)initWithCVMat:(const cv::Mat&)cvMat;
 
 @property (nonatomic, readonly) cv::Mat CVMat;
 @property (nonatomic, readonly) cv::Mat CVGrayscaleMat;
 
 @end
+
+#endif

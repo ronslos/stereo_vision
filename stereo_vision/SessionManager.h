@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 ronslos@gmail.com. All rights reserved.
 //
 
+#ifndef session_manager_h_
+#define session_manager_h_
+
 #define k_Capture_Message 0;
 
 #import <UIKit/UIKit.h>
@@ -38,5 +41,9 @@
 - (void) sendCalculateTimeDelay;
 - (void) sendCalculateTimeDelayResponse;
 - (void) sendMoveBackToMenu;
+- (void) sendMoveToSettings: (id) sender;
+- (void) settingsUpdate: (NSString*) field withValue:(NSString*) value;
 
 @end
+
+#endif
