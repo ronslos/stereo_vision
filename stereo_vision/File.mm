@@ -242,7 +242,8 @@ int SADWindowSize = 0, numberOfDisparities = 0;
     sgbm.fullDP = 0;
     
     
-    Mat disp, disp8 ,xyz;
+    Mat disp, disp8;
+    Mat xyz = Mat(img1->rows, img1->cols, CV_32FC3);
     
     if (algType == 0) {
         sgbm(*img1,*img2,disp);
@@ -250,10 +251,45 @@ int SADWindowSize = 0, numberOfDisparities = 0;
     else {
         bm(*img1, *img2, disp);
     }
-    
+    double Q03, Q13, Q23, Q32, Q33;
+    Q03 = Q.at<double>(0,3);
+    Q13 = Q.at<double>(1,3);
+    Q23 = Q.at<double>(2,3);
+    Q32 = Q.at<double>(3,2);
+    Q33 = Q.at<double>(3,3);
     disp.convertTo(disp8, CV_8U, 255/(numberOfDisparities*16.));
-    reprojectImageTo3D(disp, xyz, Q, true);
+
+    
+    double px, py, pz;
+    for (int i = 0; i < img1->rows; i++)
+    {
+        uchar* disp_ptr = disp8.ptr<uchar>(i);
+
+
+        for (int j = 0; j < img1->cols; j++)
+        {
+            //Get 3D coordinates
+            uchar d = disp_ptr[j];
+            //std::cout << int(d) << std::endl;
+            if ( d == 0 ) continue; //Discard bad pixels
+            double pw = -1.0 * static_cast<double>(d) * Q32 + Q33;
+            px = static_cast<double>(j) + Q03;
+            py = static_cast<double>(i) + Q13;
+            pz = Q23;
+            
+            px = px/pw;
+            py = py/pw;
+            pz = pz/pw;
+            xyz.at<Vec3f>(i,j)[0] = px;
+            xyz.at<Vec3f>(i,j)[1] = py;
+            xyz.at<Vec3f>(i,j)[2] = pz;
+        }
+    }
+
+
+    //reprojectImageTo3D(disp, xyz, Q, true);
     *outImg = disp8;
     *img1 = canvas;
+    *img2 = xyz;
 }
 
