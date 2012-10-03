@@ -114,7 +114,7 @@
             if (_videoCapture && _videoCapture->grab())
             { 
                 (*_videoCapture) >> _lastFrame;
-                //[self processFrame];
+                cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     self.imageView.image = [UIImage imageWithCVMat:_lastFrame]; 
                 });
@@ -212,7 +212,8 @@
 
         _notCapturing = NO;
         (*_videoCapture) >> _lastFrame;
-        [self.captureBtn setEnabled:NO];
+        cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
+         [self.captureBtn setEnabled:NO];
         dispatch_queue_t myQueue = dispatch_queue_create("my op thread", NULL);
         dispatch_async(myQueue, ^{
             UIImage* corners = [self findCorners];
