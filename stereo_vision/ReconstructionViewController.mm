@@ -96,6 +96,7 @@ static int TEN_K = 51200/8;
             {
                 _pause = NO;
                 (*_videoCapture) >> _lastFrame;
+                cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     self.imageView.image = [UIImage imageWithCVMat:_lastFrame];
                 });
@@ -303,15 +304,23 @@ static int TEN_K = 51200/8;
             cv::cvtColor(_lastFrame, gray1, CV_RGB2GRAY);
             cv::cvtColor(_secondImg, gray2, CV_RGB2GRAY);
             reconstruct(_imageSize, &gray1, &gray2, &_depthImg, _map11, _map12, _map21, _map22, _roi1, _roi2 ,_Q, self.pickAlg.selectedSegmentIndex);
-            std::vector<cv::Mat> rgbChannels(3);
-            cv::Mat gray3;
-            cv::split(_depthImg, rgbChannels);
-            cv::cvtColor(rgbChannels[0], gray3, CV_GRAY2RGB);
             _notCapturing = YES;
             self.imageView.image = [UIImage imageWithCVMat:_depthImg];
             
             [self saveImage:[UIImage imageWithCVMat:gray1]];
-            [self saveImage:[UIImage imageWithCVMat:_depthImg]];//************ Omer **********
+            [self saveImage:[UIImage imageWithCVMat:_depthImg]];
+            int i;
+            for(i=0; i< gray2.rows; i++)
+                for(int j=0; j<gray2.cols; j++)
+                    std::cout << gray2.at<cv::Vec3f>(i,j)[0] << "," << gray2.at<cv::Vec3f>(i,j)[1] << "," << gray2.at<cv::Vec3f>(i,j)[2] << ","<<std::endl;
+            std::cout <<" };" <<std::endl;
+            std::cout <<"char colors[] ={"<< std::endl;
+            cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
+            for(i=0; i< gray2.rows; i++)
+                for(int j=0; j<gray2.cols; j++)
+                    std::cout << (int)_lastFrame.at<cv::Vec3b>(i,j)[0] <<"," <<(int)_lastFrame.at<cv::Vec3b>(i,j)[1] <<"," <<(int)_lastFrame.at<cv::Vec3b>(i,j)[2] <<","<< std::endl;
+            
+            //************ Omer **********
             //UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NULL message:@"Would you like to save?" delegate:self cancelButtonTitle:@"Discard" otherButtonTitles:@"save", nil];
             //[alert show];
             //[alert release];
