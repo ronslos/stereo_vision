@@ -288,8 +288,7 @@ int SADWindowSize = 0, numberOfDisparities = 0;
 
 
     //reprojectImageTo3D(disp, xyz, Q, true);
-    *outImg = disp8;
+    *outImg = xyz;
     *img1 = canvas;
-    *img2 = xyz;
 }
 

@@ -201,6 +201,39 @@ static int TEN_K = 51200/8;
     return data;
 }
 
+- (NSData*) dataFromDepthImage:(cv::Mat*) depthImage andColorImage: (cv::Mat*) colorImage
+{
+    int matRows = colorImage->rows;
+    int matCols = colorImage->cols;
+    NSMutableData* data = [[NSMutableData alloc]init];
+    cv::Vec3f pos;
+    cv::Vec3b pix;
+    float val;
+    for (int i = 0; i < matRows; i++)
+    {
+        for (int j = 0; j < matCols; j++ )
+        {
+            pix = colorImage->at<cv::Vec3b>(i,j);
+            pos = depthImage->at<cv::Vec3f>(i,j);
+            val = (float)pos[0]/1000;
+            [data appendBytes:(void*)(&val) length:sizeof(float)];
+            val = (float)pos[1]/1000;
+            [data appendBytes:(void*)(&val) length:sizeof(float)];
+            val = (float)pos[2]/1000;
+            [data appendBytes:(void*)(&val) length:sizeof(float)];
+            val = (float)pix[0]/255;
+            [data appendBytes:(void*)(&val) length:sizeof(float)];
+            val = (float)pix[1]/255;
+            [data appendBytes:(void*)(&val) length:sizeof(float)];
+            val = (float) pix[2]/255;
+            [data appendBytes:(void*)(&val) length:sizeof(float)];
+            val = 1.0;
+            [data appendBytes:(void*)(&val) length:sizeof(float)];
+        }
+    }
+    return data;
+}
+
 - (void) imageFromData: (NSData *) data withSize:(cv::Size) size: (cv::Mat*) img 
 {
     unsigned char *pix=NULL , *bytes;
@@ -215,12 +248,11 @@ static int TEN_K = 51200/8;
             img->at<unsigned char>(i , 3*j+2 ) = *pix;
             img->at<unsigned char>(i , 3*j ) = *pix;
             
-            // NSLog(@"%d\n" ,i * size.width*3 + j);
         }
     }
 }
 
-- (void) saveImage:(UIImage *)image 
+- (void) saveImage:(UIImage *)image withDepthMap: (cv::Mat*) depthMap
 {
     
     NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -228,6 +260,12 @@ static int TEN_K = 51200/8;
     [UIImageJPEGRepresentation(image, 1.0) writeToFile:[documentsDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"IMG_%d.%@", imgNum, @"jpg"]] options:NSAtomicWrite error:nil];
     NSString * picPath = [documentsDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"IMG_%d.%@", imgNum, @"jpg"]];
     NSLog(@"url is %@" , picPath);
+    
+    // create and save deapth data
+    cv::Mat imageMat = [image CVMat];
+    NSData* data = [NSData dataWithData:[self dataFromDepthImage:depthMap andColorImage: &imageMat ]];
+    NSString * depthPath = [documentsDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"DEPTH_IMG_%d", imgNum]];
+    [NSKeyedArchiver archiveRootObject:data toFile:depthPath];
     
     // create the date
     NSDate * date = [NSDate date];
@@ -237,7 +275,7 @@ static int TEN_K = 51200/8;
     
     // save description of picture in pictures array
     NSLog(@"saving image number %d" , imgNum); // debug
-    NSDictionary* pic = [[NSDictionary alloc] initWithObjectsAndKeys: [NSString stringWithFormat:@"IMG_%d", imgNum], @"name", dateString, @"date", picPath, @"url", nil];
+    NSDictionary* pic = [[NSDictionary alloc] initWithObjectsAndKeys: [NSString stringWithFormat:@"IMG_%d", imgNum], @"name", dateString, @"date", picPath, @"url",depthPath , @"depth_url", nil];
     NSLog(@"after dictionary"); // debug
     [self.pictures addObject:pic];
     NSLog(@"after adding a picture" ); // debug
@@ -307,18 +345,19 @@ static int TEN_K = 51200/8;
             _notCapturing = YES;
             self.imageView.image = [UIImage imageWithCVMat:_depthImg];
             
-            [self saveImage:[UIImage imageWithCVMat:gray1]];
-            [self saveImage:[UIImage imageWithCVMat:_depthImg]];
-            int i;
-            for(i=0; i< gray2.rows; i++)
-                for(int j=0; j<gray2.cols; j++)
-                    std::cout << gray2.at<cv::Vec3f>(i,j)[0] << "," << gray2.at<cv::Vec3f>(i,j)[1] << "," << gray2.at<cv::Vec3f>(i,j)[2] << ","<<std::endl;
-            std::cout <<" };" <<std::endl;
-            std::cout <<"char colors[] ={"<< std::endl;
-            cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
-            for(i=0; i< gray2.rows; i++)
-                for(int j=0; j<gray2.cols; j++)
-                    std::cout << (int)_lastFrame.at<cv::Vec3b>(i,j)[0] <<"," <<(int)_lastFrame.at<cv::Vec3b>(i,j)[1] <<"," <<(int)_lastFrame.at<cv::Vec3b>(i,j)[2] <<","<< std::endl;
+            [self saveImage:[UIImage imageWithCVMat:_lastFrame] withDepthMap:&_depthImg];
+            
+            
+//            int i;
+//            for(i=0; i< gray2.rows; i++)
+//                for(int j=0; j<gray2.cols; j++)
+//                    std::cout << gray2.at<cv::Vec3f>(i,j)[0] << "," << gray2.at<cv::Vec3f>(i,j)[1] << "," << gray2.at<cv::Vec3f>(i,j)[2] << ","<<std::endl;
+//            std::cout <<" };" <<std::endl;
+//            std::cout <<"char colors[] ={"<< std::endl;
+//            cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
+//            for(i=0; i< gray2.rows; i++)
+//                for(int j=0; j<gray2.cols; j++)
+//                    std::cout << (int)_lastFrame.at<cv::Vec3b>(i,j)[0] <<"," <<(int)_lastFrame.at<cv::Vec3b>(i,j)[1] <<"," <<(int)_lastFrame.at<cv::Vec3b>(i,j)[2];
             
             //************ Omer **********
             //UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NULL message:@"Would you like to save?" delegate:self cancelButtonTitle:@"Discard" otherButtonTitles:@"save", nil];

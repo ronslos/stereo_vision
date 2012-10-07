@@ -53,6 +53,10 @@
 		17C6A0DF15B5F3B600372355 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C6A0DD15B5F3B600372355 /* CoreMedia.framework */; };
 		17C6A0E015B5F3B600372355 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C6A0DE15B5F3B600372355 /* CoreVideo.framework */; };
 		17C6A0E215B5F3BF00372355 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C6A0E115B5F3BF00372355 /* AVFoundation.framework */; };
+		C52983DF161F7CEF00F92252 /* glViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C52983DE161F7CEF00F92252 /* glViewController.m */; };
+		C52983E2161F7DA700F92252 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C52983E1161F7DA700F92252 /* OpenGLES.framework */; };
+		C52983E8161F7E0400F92252 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C52983E7161F7E0400F92252 /* GLKit.framework */; };
+		C52983EA161F800000F92252 /* tile_floor.png in Resources */ = {isa = PBXBuildFile; fileRef = C52983E9161F800000F92252 /* tile_floor.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -117,6 +121,11 @@
 		17C6A0DD15B5F3B600372355 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		17C6A0DE15B5F3B600372355 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		17C6A0E115B5F3BF00372355 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		C52983DE161F7CEF00F92252 /* glViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = glViewController.m; sourceTree = "<group>"; };
+		C52983E1161F7DA700F92252 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		C52983E7161F7E0400F92252 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		C52983E9161F800000F92252 /* tile_floor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tile_floor.png; sourceTree = "<group>"; };
+		C586B8FE1620679F00606DAE /* glViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glViewController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +133,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C52983E8161F7E0400F92252 /* GLKit.framework in Frameworks */,
+				C52983E2161F7DA700F92252 /* OpenGLES.framework in Frameworks */,
 				174F3E8A15D44BF9007B7A62 /* QuartzCore.framework in Frameworks */,
 				17C6A0E215B5F3BF00372355 /* AVFoundation.framework in Frameworks */,
 				17C6A0DF15B5F3B600372355 /* CoreMedia.framework in Frameworks */,
@@ -158,6 +169,7 @@
 		17C69FF415B5B02100372355 = {
 			isa = PBXGroup;
 			children = (
+				C52983E7161F7E0400F92252 /* GLKit.framework */,
 				17C6A00915B5B02100372355 /* stereo_vision */,
 				17C6A00215B5B02100372355 /* Frameworks */,
 				17C6A00015B5B02100372355 /* Products */,
@@ -175,6 +187,7 @@
 		17C6A00215B5B02100372355 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C52983E1161F7DA700F92252 /* OpenGLES.framework */,
 				174F3E8915D44BF8007B7A62 /* QuartzCore.framework */,
 				17C6A0E115B5F3BF00372355 /* AVFoundation.framework */,
 				17C6A0DD15B5F3B600372355 /* CoreMedia.framework */,
@@ -207,6 +220,8 @@
 		17C6A00915B5B02100372355 /* stereo_vision */ = {
 			isa = PBXGroup;
 			children = (
+				C586B8FE1620679F00606DAE /* glViewController.h */,
+				C52983DE161F7CEF00F92252 /* glViewController.m */,
 				17C6A03115B5C67200372355 /* File.h */,
 				17C6A03215B5C67200372355 /* File.mm */,
 				17C6A09D15B5CE3500372355 /* ReconstructionViewController.h */,
@@ -237,6 +252,7 @@
 		17C6A00A15B5B02100372355 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C52983E9161F800000F92252 /* tile_floor.png */,
 				17C6A01215B5B02100372355 /* AppDelegate.h */,
 				17C6A01315B5B02100372355 /* AppDelegate.m */,
 				17C6A00B15B5B02100372355 /* stereo_vision-Info.plist */,
@@ -313,6 +329,7 @@
 				176342B115BAE13100AAD6E4 /* bright_bg_img1.jpeg in Resources */,
 				176342B215BAE13100AAD6E4 /* bright_bg_img2.jpeg in Resources */,
 				176342B315BAE13100AAD6E4 /* bright_bg_img3.jpeg in Resources */,
+				C52983EA161F800000F92252 /* tile_floor.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,6 +352,7 @@
 				17C6A09F15B5CE3600372355 /* ReconstructionViewController.mm in Sources */,
 				1763429D15B7FC7A00AAD6E4 /* LibraryViewController.mm in Sources */,
 				1772E8A21614DD0F003DCD6F /* ImageViewController.m in Sources */,
+				C52983DF161F7CEF00F92252 /* glViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

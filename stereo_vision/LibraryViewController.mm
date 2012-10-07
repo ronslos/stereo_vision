@@ -7,6 +7,7 @@
 //
 
 #import "LibraryViewController.h"
+#import "glViewController.h"
 
 @interface LibraryViewController ()
 
@@ -106,12 +107,21 @@
     NSDictionary * picture = [self.pictures objectAtIndex:indexPath.row];
     NSString * url = [picture objectForKey:@"url"];
     NSLog(@"url is %@" , url);
+    NSString * depthUrl = [picture objectForKey:@"depth_url"];
+    NSLog(@"depthurl is %@" , depthUrl);
     UIImage * img = [UIImage imageWithContentsOfFile:[picture objectForKey:@"url"]];
+    NSData *data = [NSKeyedUnarchiver unarchiveObjectWithFile:depthUrl];
+    Vertex* vertices = (Vertex*)[data bytes];
+
     //UIImage * result = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/IMG_%d.%@", documentsDirectoryPath, imgNum ,@"jpg"]];
     if ([segue.identifier isEqualToString:@"moveToImage"]) 
     {
-        [segue.destinationViewController setImgName: [picture objectForKey:@"name"]];
-        [segue.destinationViewController setImage:img];
+        [segue.destinationViewController setVertices: vertices];
+        [segue.destinationViewController setVertexNumber:[data length]/(7*sizeof(float))];
+        
+        
+        //[segue.destinationViewController setImgName: [picture objectForKey:@"name"]];
+        //[segue.destinationViewController setImage:img];
     }
 }
 
