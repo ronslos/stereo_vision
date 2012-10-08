@@ -282,9 +282,17 @@ int SADWindowSize = 0, numberOfDisparities = 0;
             py = static_cast<double>(i) + Q13;
             pz = Q23;
             
-            px = px/pw;
-            py = py/pw;
-            pz = pz/pw;
+            if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"side"] hasPrefix:@"Left"] ){
+                px = px/pw;
+                py = py/pw;
+                pz = pz/pw;
+            }
+            else{
+                px = -px/pw;
+                py = -py/pw;
+                pz = -pz/pw;
+            }
+        
             xyz.at<Vec3f>(i,j)[0] = px;
             xyz.at<Vec3f>(i,j)[1] = py;
             xyz.at<Vec3f>(i,j)[2] = pz;

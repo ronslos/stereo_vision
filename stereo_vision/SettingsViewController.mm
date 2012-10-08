@@ -48,6 +48,7 @@
 @synthesize F3_1;
 @synthesize F3_2;
 @synthesize F3_3;
+@synthesize LeftRightControl;
 
 
 - (void)viewDidLoad
@@ -79,13 +80,15 @@
     NSString* boardHeightString = (NSString*) [[NSUserDefaults standardUserDefaults] objectForKey:@"boardHeight"];
     NSString* squareHeightString = (NSString*) [[NSUserDefaults standardUserDefaults] objectForKey:@"squareHeight"];
     NSString* squareWidthString = (NSString*) [[NSUserDefaults standardUserDefaults] objectForKey:@"squareWidth"];
+    NSString* side = (NSString*) [[NSUserDefaults standardUserDefaults] objectForKey:@"side"];
     
     [self.boardWidth setText:boardWidthString];
     [self.boardHeight setText:boardHeightString];
     [self.squareHeight setText:squareHeightString];
     [self.squareWidth setText:squareWidthString];
+    [self.LeftRightControl setSelectedSegmentIndex:[side hasPrefix:@"Left"]? 0 : 1];
     
-    [self.scrollView setContentSize:CGSizeMake(320, 620)];
+    [self.scrollView setContentSize:CGSizeMake(320, 700)];
     
     // Upload from memory the settings that are stored
     NSMutableArray* RArray = (NSMutableArray*)[[NSUserDefaults standardUserDefaults] objectForKey:@"Rarray"];
@@ -157,6 +160,7 @@
     [self setF3_3:nil];
     [self setSquareWidth:nil];
     [self setSquareHeight:nil];
+    [self setLeftRightControl:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -222,6 +226,24 @@
 
 }
 
+- (IBAction)LeftRightControlChanged:(UISegmentedControl*)sender {
+    if ([sender selectedSegmentIndex]==0) {
+        [[NSUserDefaults standardUserDefaults] setObject: [NSString stringWithFormat:@"Left"] forKey:@"side"];
+        if (_sessionManager.mySession != NULL) {
+            // send new square width data to other device
+            [_sessionManager settingsUpdate:@"side:" withValue:[NSString stringWithFormat:@"Right"]];
+        }
+    }
+    else if ([sender selectedSegmentIndex]==1) {
+        [[NSUserDefaults standardUserDefaults] setObject: [NSString stringWithFormat:@"Right"] forKey:@"side"];
+        if (_sessionManager.mySession != NULL) {
+            // send new square width data to other device
+            [_sessionManager settingsUpdate:@"side:" withValue:[NSString stringWithFormat:@"Left"]];
+        }
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 #pragma mark -
 #pragma mark GKPeerPickerControllerDelegate
 
@@ -264,6 +286,20 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self.squareWidth setText:value]; 
     }
+    else if ([whatDidIget hasPrefix:@"side:"])
+    {
+        NSString* value = [whatDidIget substringFromIndex:5];
+        NSLog(@"value is %d", [value integerValue]); // debug
+        [[NSUserDefaults standardUserDefaults] setObject: value forKey:@"side"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        if ([value hasPrefix:@"Left"]){
+            [LeftRightControl setSelectedSegmentIndex:0];
+        }
+        else if ([value hasPrefix:@"Right"]){
+            [LeftRightControl setSelectedSegmentIndex:1];
+        }
+    }
 }
+
 
 @end

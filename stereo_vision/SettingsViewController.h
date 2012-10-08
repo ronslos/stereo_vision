@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *squareHeight;
 - (IBAction)saveSquareWidth:(UITextField *)sender;
 @property (weak, nonatomic) IBOutlet UITextField *squareWidth;
+- (IBAction)LeftRightControlChanged:(UISegmentedControl*)sender;
 
 @property (weak, nonatomic) IBOutlet UILabel *R1_1;
 @property (weak, nonatomic) IBOutlet UILabel *R1_2;
@@ -55,5 +56,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *F3_1;
 @property (weak, nonatomic) IBOutlet UILabel *F3_2;
 @property (weak, nonatomic) IBOutlet UILabel *F3_3;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *LeftRightControl;
 
 @end

@@ -25,6 +25,7 @@
     bool _notCapturing;
     bool _chunksReceived;
     bool _pause;
+    bool _isLeftCamera;
     int _chunkCount;
     int _totalChunks;
     NSMutableData* _imgData;

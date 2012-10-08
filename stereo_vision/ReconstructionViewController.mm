@@ -68,6 +68,11 @@ static int TEN_K = 51200/8;
     else {
         self.waitPeriod = 0;
     }
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"side"] != NULL)
+    {
+        _isLeftCamera = [(NSString *)[[NSUserDefaults standardUserDefaults] objectForKey:@"side"] hasPrefix:@"Left"] ? YES : NO;
+    }
     NSLog(@"loading recon");
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"pictures"] != NULL) {
         NSArray * savedArray = (NSArray*)[[NSUserDefaults standardUserDefaults] objectForKey:@"pictures"];
@@ -342,11 +347,22 @@ static int TEN_K = 51200/8;
             cv::Mat gray1,gray2;
             cv::cvtColor(_lastFrame, gray1, CV_RGB2GRAY);
             cv::cvtColor(_secondImg, gray2, CV_RGB2GRAY);
-            reconstruct(_imageSize, &gray1, &gray2, &_depthImg, _map11, _map12, _map21, _map22, _roi1, _roi2 ,_Q, self.pickAlg.selectedSegmentIndex);
             _notCapturing = YES;
-            self.imageView.image = [UIImage imageWithCVMat:gray1];
-            cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
-            [self saveImage:[UIImage imageWithCVMat:_lastFrame] withDepthMap:&_depthImg withDisparity:&gray2];
+            if (_isLeftCamera){
+                reconstruct(_imageSize, &gray1, &gray2, &_depthImg, _map11, _map12, _map21, _map22, _roi1, _roi2 ,_Q, self.pickAlg.selectedSegmentIndex);
+                self.imageView.image = [UIImage imageWithCVMat:gray2];
+                cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
+                [self saveImage:[UIImage imageWithCVMat:_lastFrame] withDepthMap:&_depthImg withDisparity:&gray2];
+            }
+            else
+            {
+                reconstruct(_imageSize, &gray2, &gray1, &_depthImg, _map21, _map22, _map11, _map12, _roi2, _roi1 ,_Q, self.pickAlg.selectedSegmentIndex);
+                self.imageView.image = [UIImage imageWithCVMat:gray1];
+                cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
+                [self saveImage:[UIImage imageWithCVMat:_lastFrame] withDepthMap:&_depthImg withDisparity:&gray1];
+            }
+
+
 
             
 //            

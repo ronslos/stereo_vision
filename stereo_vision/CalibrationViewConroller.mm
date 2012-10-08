@@ -138,10 +138,7 @@
     [self setActivityIndicator:nil];
     [super viewDidUnload];
     self.imageView = nil;
-
-    delete _videoCapture;
-    _videoCapture = nil;
-    _captureBtn = nil;
+    self.captureBtn = nil;
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
@@ -151,6 +148,13 @@
         [_sessionManager sendMoveBackToMenu];
     }
     [super viewWillDisappear:animated];
+}
+
+-(void) viewDidDisappear:(BOOL)animated {
+//    delete _videoCapture;
+    _videoCapture->release();
+    _videoCapture = nil;
+    _imagePoints->clear();
 }
 
 /*

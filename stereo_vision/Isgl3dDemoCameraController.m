@@ -74,28 +74,30 @@
 	}
 		
 	// Convert camera angles to positions
-	float y = _orbit * sin(_phi * M_PI / 180);
-	float l = _orbit * cos(_phi * M_PI / 180);
-	float x = l * sin(_theta * M_PI / 180);
-	float z = l * cos(_theta * M_PI / 180);
+//	float y = _orbit * sin(_phi * M_PI / 180);
+//	float l = _orbit * cos(_phi * M_PI / 180);
+//	float x = l * sin(_theta * M_PI / 180);
+//	float z = l * cos(_theta * M_PI / 180);
 
 	// Take target into account if it exists
 	if (_target) {
 		float targetPosition[4];
 		[_target copyWorldPositionToArray:targetPosition];
 		
-		x += targetPosition[0];
-		y += targetPosition[1];
-		z += targetPosition[2];
+//		x += targetPosition[0];
+//		y += targetPosition[1];
+//		z += targetPosition[2];
 		[_camera lookAt:targetPosition[0] y:targetPosition[1] z:targetPosition[2]];
 	}
 
 	// Translate camera
-	_camera.position = iv3(x, y, z);
+	_camera.position = iv3(0, 0, -_orbit);
 	
 	// Add damping to camera velocities
 	_vTheta *= 0.99;
 	_vPhi *= 0.99;
+    _target.rotationY = -_theta;
+    _target.rotationX = _phi;
 }
 
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -167,5 +169,7 @@
 	
 	return sqrt(dx*dx + dy*dy);
 }
+
+
 
 @end
