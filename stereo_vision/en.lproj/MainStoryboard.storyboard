@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2549" systemVersion="12C54" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="dky-Gc-Wab">
     <dependencies>
+        <deployment defaultVersion="1296" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1498"/>
     </dependencies>
     <scenes>
@@ -222,31 +223,22 @@
             </objects>
             <point key="canvasLocation" x="1437" y="-805"/>
         </scene>
-        <!--Image View Controller - Image View-->
+        <!--Isgl 3d View Controller - Image View-->
         <scene sceneID="BfV-1L-Iaf">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NhJ-qq-wUh" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController title="Image View" id="nQk-Oo-2BY" customClass="ImageViewController" sceneMemberID="viewController">
+                <viewController title="Image View" id="nQk-Oo-2BY" customClass="Isgl3dViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zzD-mC-li6">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="ZV6-LT-zYx">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            </imageView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Selected Image" id="r8K-bg-ziL">
                         <barButtonItem key="backBarButtonItem" title="3D Photo Album" id="ULG-bG-hUr"/>
                     </navigationItem>
-                    <connections>
-                        <outlet property="imageView" destination="ZV6-LT-zYx" id="4JA-Kq-TSS"/>
-                    </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1911" y="-1023"/>
+            <point key="canvasLocation" x="1921" y="-1031"/>
         </scene>
         <!--Settings View Controller - Settings-->
         <scene sceneID="rz8-ZB-xt1">

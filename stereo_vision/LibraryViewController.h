@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ImageViewController.h"
+#import "Isgl3dViewController.h"
+
+
 
 @interface LibraryViewController : UITableViewController
 

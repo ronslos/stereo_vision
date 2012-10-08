@@ -14,7 +14,7 @@
 #import <AVFoundation/AVCaptureDevice.h>
 #import <UIKit/UIKit.h>
 
-@interface ReconstructionViewController : UIViewController <GKPeerPickerControllerDelegate, UIAlertViewDelegate>
+@interface ReconstructionViewController : UIViewController <GKPeerPickerControllerDelegate>
 
 {
     cv::VideoCapture *_videoCapture;

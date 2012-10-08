@@ -271,7 +271,12 @@ int SADWindowSize = 0, numberOfDisparities = 0;
             //Get 3D coordinates
             uchar d = disp_ptr[j];
             //std::cout << int(d) << std::endl;
-            if ( d == 0 ) continue; //Discard bad pixels
+            if ( d == 0 )
+            {
+                px = static_cast<double>(j) + Q03;
+                py = static_cast<double>(i) + Q13;
+                pz =0;
+            }
             double pw = -1.0 * static_cast<double>(d) * Q32 + Q33;
             px = static_cast<double>(j) + Q03;
             py = static_cast<double>(i) + Q13;
@@ -288,8 +293,8 @@ int SADWindowSize = 0, numberOfDisparities = 0;
 
 
     //reprojectImageTo3D(disp, xyz, Q, true);
-    *outImg = disp8;
+    *outImg = xyz;
     *img1 = canvas;
-    *img2 = xyz;
+    *img2 = disp8;
 }
 

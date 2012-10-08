@@ -53,6 +53,12 @@
 		17C6A0DF15B5F3B600372355 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C6A0DD15B5F3B600372355 /* CoreMedia.framework */; };
 		17C6A0E015B5F3B600372355 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C6A0DE15B5F3B600372355 /* CoreVideo.framework */; };
 		17C6A0E215B5F3BF00372355 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C6A0E115B5F3BF00372355 /* AVFoundation.framework */; };
+		C513D8DD1622FDD20082144B /* libisgl3d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C513D8DC1622FDD20082144B /* libisgl3d.a */; };
+		C5A447FE1621B56200490911 /* Isgl3dViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5A447FB1621B56200490911 /* Isgl3dViewController.m */; };
+		C5A447FF1621B56200490911 /* DepthView.m in Sources */ = {isa = PBXBuildFile; fileRef = C5A447FD1621B56200490911 /* DepthView.m */; };
+		C5A448011621B85D00490911 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5A448001621B85D00490911 /* OpenGLES.framework */; };
+		C5A4484516222E4C00490911 /* particle.png in Resources */ = {isa = PBXBuildFile; fileRef = C5A4484416222E4B00490911 /* particle.png */; };
+		C5A4484816223ECA00490911 /* Isgl3dDemoCameraController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5A4484716223ECA00490911 /* Isgl3dDemoCameraController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -117,6 +123,15 @@
 		17C6A0DD15B5F3B600372355 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		17C6A0DE15B5F3B600372355 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		17C6A0E115B5F3BF00372355 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		C513D8DC1622FDD20082144B /* libisgl3d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libisgl3d.a; sourceTree = "<group>"; };
+		C5A447FA1621B56200490911 /* Isgl3dViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Isgl3dViewController.h; sourceTree = "<group>"; };
+		C5A447FB1621B56200490911 /* Isgl3dViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Isgl3dViewController.m; sourceTree = "<group>"; };
+		C5A447FC1621B56200490911 /* DepthView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DepthView.h; sourceTree = "<group>"; };
+		C5A447FD1621B56200490911 /* DepthView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DepthView.m; sourceTree = "<group>"; };
+		C5A448001621B85D00490911 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		C5A4484416222E4B00490911 /* particle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = particle.png; sourceTree = "<group>"; };
+		C5A4484616223EC900490911 /* Isgl3dDemoCameraController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Isgl3dDemoCameraController.h; sourceTree = "<group>"; };
+		C5A4484716223ECA00490911 /* Isgl3dDemoCameraController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Isgl3dDemoCameraController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +139,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C513D8DD1622FDD20082144B /* libisgl3d.a in Frameworks */,
+				C5A448011621B85D00490911 /* OpenGLES.framework in Frameworks */,
 				174F3E8A15D44BF9007B7A62 /* QuartzCore.framework in Frameworks */,
 				17C6A0E215B5F3BF00372355 /* AVFoundation.framework in Frameworks */,
 				17C6A0DF15B5F3B600372355 /* CoreMedia.framework in Frameworks */,
@@ -158,6 +175,7 @@
 		17C69FF415B5B02100372355 = {
 			isa = PBXGroup;
 			children = (
+				C513D8DC1622FDD20082144B /* libisgl3d.a */,
 				17C6A00915B5B02100372355 /* stereo_vision */,
 				17C6A00215B5B02100372355 /* Frameworks */,
 				17C6A00015B5B02100372355 /* Products */,
@@ -175,6 +193,7 @@
 		17C6A00215B5B02100372355 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C5A448001621B85D00490911 /* OpenGLES.framework */,
 				174F3E8915D44BF8007B7A62 /* QuartzCore.framework */,
 				17C6A0E115B5F3BF00372355 /* AVFoundation.framework */,
 				17C6A0DD15B5F3B600372355 /* CoreMedia.framework */,
@@ -207,6 +226,12 @@
 		17C6A00915B5B02100372355 /* stereo_vision */ = {
 			isa = PBXGroup;
 			children = (
+				C5A447FA1621B56200490911 /* Isgl3dViewController.h */,
+				C5A447FB1621B56200490911 /* Isgl3dViewController.m */,
+				C5A4484616223EC900490911 /* Isgl3dDemoCameraController.h */,
+				C5A4484716223ECA00490911 /* Isgl3dDemoCameraController.m */,
+				C5A447FC1621B56200490911 /* DepthView.h */,
+				C5A447FD1621B56200490911 /* DepthView.m */,
 				17C6A03115B5C67200372355 /* File.h */,
 				17C6A03215B5C67200372355 /* File.mm */,
 				17C6A09D15B5CE3500372355 /* ReconstructionViewController.h */,
@@ -237,6 +262,7 @@
 		17C6A00A15B5B02100372355 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C5A4484416222E4B00490911 /* particle.png */,
 				17C6A01215B5B02100372355 /* AppDelegate.h */,
 				17C6A01315B5B02100372355 /* AppDelegate.m */,
 				17C6A00B15B5B02100372355 /* stereo_vision-Info.plist */,
@@ -313,6 +339,7 @@
 				176342B115BAE13100AAD6E4 /* bright_bg_img1.jpeg in Resources */,
 				176342B215BAE13100AAD6E4 /* bright_bg_img2.jpeg in Resources */,
 				176342B315BAE13100AAD6E4 /* bright_bg_img3.jpeg in Resources */,
+				C5A4484516222E4C00490911 /* particle.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,6 +362,9 @@
 				17C6A09F15B5CE3600372355 /* ReconstructionViewController.mm in Sources */,
 				1763429D15B7FC7A00AAD6E4 /* LibraryViewController.mm in Sources */,
 				1772E8A21614DD0F003DCD6F /* ImageViewController.m in Sources */,
+				C5A447FE1621B56200490911 /* Isgl3dViewController.m in Sources */,
+				C5A447FF1621B56200490911 /* DepthView.m in Sources */,
+				C5A4484816223ECA00490911 /* Isgl3dDemoCameraController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,12 +443,15 @@
 				HEADER_SEARCH_PATHS = (
 					"\"./opencvios/include\"",
 					"\"./opencvios/include/opencv2\"",
+					"./isgl3d/**",
+					"./external/**",
 				);
 				INFOPLIST_FILE = "stereo_vision/stereo_vision-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"./opencvios/lib/Debug\"",
+					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -433,12 +466,15 @@
 				HEADER_SEARCH_PATHS = (
 					"\"./opencvios/include\"",
 					"\"./opencvios/include/opencv2\"",
+					"./isgl3d/**",
+					"./external/**",
 				);
 				INFOPLIST_FILE = "stereo_vision/stereo_vision-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"./opencvios/lib/Debug\"",
+					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;

@@ -15,7 +15,7 @@ static int TEN_K = 51200/8;
 - (void) showCaptureOnScreen;
 - (NSMutableData*) dataFromImage:(cv::Mat*) image;
 - (void) imageFromData: (NSData *) data withSize:(cv::Size) size: (cv::Mat*) img; 
-- (void) saveImage:(UIImage *)image; 
+- (void) saveImage:(UIImage *)image withDepthMap: (cv::Mat*) depthMap withDisparity: (cv::Mat*) disparity;
 - (void) displayLastImage;
 
 @end
@@ -183,6 +183,35 @@ static int TEN_K = 51200/8;
         NSLog(@"Failed to grab frame");
     }
 }
+- (NSData*) dataFromDepthImage:(cv::Mat*) depthImage andColorImage: (cv::Mat*) colorImage
+{
+
+    int matRows = colorImage->rows;
+    int matCols = colorImage->cols;
+    NSMutableData* data = [[NSMutableData alloc]init];
+    cv::Vec3f pos;
+    cv::Vec4b pix;
+    float val;
+    for (int i = 0; i < matRows; i++)
+    {
+        for (int j = 0; j < matCols; j++ )
+        {
+            pix = colorImage->at<cv::Vec4b>(i,j);
+            pos = depthImage->at<cv::Vec3f>(i,j);
+            [data appendBytes:(void*)(&pos[0]) length:sizeof(float)];
+            [data appendBytes:(void*)(&pos[1]) length:sizeof(float)];
+            [data appendBytes:(void*)(&pos[2]) length:sizeof(float)];
+            val = (float)pix[0]/255;
+            [data appendBytes:(void*)(&val) length:sizeof(float)];
+            val = (float)pix[1]/255;
+            [data appendBytes:(void*)(&val) length:sizeof(float)];
+            val = (float) pix[2]/255;
+            [data appendBytes:(void*)(&val) length:sizeof(float)];
+//            [data appendBytes:(void*)(&one) length:sizeof(float)];
+        }
+    }
+    return data;
+}
 
 - (NSMutableData*) dataFromImage:(cv::Mat*) image
 {
@@ -220,14 +249,23 @@ static int TEN_K = 51200/8;
     }
 }
 
-- (void) saveImage:(UIImage *)image 
+
+- (void) saveImage:(UIImage *)image withDepthMap: (cv::Mat*) depthMap withDisparity: (cv::Mat*) disparity
+
 {
     
     NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSInteger imgNum = [[NSUserDefaults standardUserDefaults]integerForKey:@"imageNum" ];
-    [UIImageJPEGRepresentation(image, 1.0) writeToFile:[documentsDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"IMG_%d.%@", imgNum, @"jpg"]] options:NSAtomicWrite error:nil];
+    [UIImageJPEGRepresentation([UIImage imageWithCVMat:*disparity], 1.0) writeToFile:[documentsDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"IMG_%d.%@", imgNum, @"jpg"]] options:NSAtomicWrite error:nil];
     NSString * picPath = [documentsDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"IMG_%d.%@", imgNum, @"jpg"]];
     NSLog(@"url is %@" , picPath);
+    
+    // create and save deapth data
+    cv::Mat imageMat = [image CVMat];
+    NSData* data = [NSData dataWithData:[self dataFromDepthImage:depthMap andColorImage: &imageMat ]];
+    NSString * depthPath = [documentsDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"DEPTH_IMG_%d", imgNum]];
+    [NSKeyedArchiver archiveRootObject:data toFile:depthPath];
+
     
     // create the date
     NSDate * date = [NSDate date];
@@ -237,7 +275,8 @@ static int TEN_K = 51200/8;
     
     // save description of picture in pictures array
     NSLog(@"saving image number %d" , imgNum); // debug
-    NSDictionary* pic = [[NSDictionary alloc] initWithObjectsAndKeys: [NSString stringWithFormat:@"IMG_%d", imgNum], @"name", dateString, @"date", picPath, @"url", nil];
+    NSDictionary* pic = [[NSDictionary alloc] initWithObjectsAndKeys: [NSString stringWithFormat:@"IMG_%d", imgNum], @"name", dateString, @"date", picPath, @"url",depthPath , @"depth_url", nil];
+
     NSLog(@"after dictionary"); // debug
     [self.pictures addObject:pic];
     NSLog(@"after adding a picture" ); // debug
@@ -305,20 +344,22 @@ static int TEN_K = 51200/8;
             cv::cvtColor(_secondImg, gray2, CV_RGB2GRAY);
             reconstruct(_imageSize, &gray1, &gray2, &_depthImg, _map11, _map12, _map21, _map22, _roi1, _roi2 ,_Q, self.pickAlg.selectedSegmentIndex);
             _notCapturing = YES;
-            self.imageView.image = [UIImage imageWithCVMat:_depthImg];
-            
-            [self saveImage:[UIImage imageWithCVMat:gray1]];
-            [self saveImage:[UIImage imageWithCVMat:_depthImg]];
-            int i;
-            for(i=0; i< gray2.rows; i++)
-                for(int j=0; j<gray2.cols; j++)
-                    std::cout << gray2.at<cv::Vec3f>(i,j)[0] << "," << gray2.at<cv::Vec3f>(i,j)[1] << "," << gray2.at<cv::Vec3f>(i,j)[2] << ","<<std::endl;
-            std::cout <<" };" <<std::endl;
-            std::cout <<"char colors[] ={"<< std::endl;
+            self.imageView.image = [UIImage imageWithCVMat:gray1];
             cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
-            for(i=0; i< gray2.rows; i++)
-                for(int j=0; j<gray2.cols; j++)
-                    std::cout << (int)_lastFrame.at<cv::Vec3b>(i,j)[0] <<"," <<(int)_lastFrame.at<cv::Vec3b>(i,j)[1] <<"," <<(int)_lastFrame.at<cv::Vec3b>(i,j)[2] <<","<< std::endl;
+            [self saveImage:[UIImage imageWithCVMat:_lastFrame] withDepthMap:&_depthImg withDisparity:&gray2];
+
+            
+//            
+//            int i;
+//            for(i=0; i< _depthImg.rows; i++)
+//                for(int j=0; j<_depthImg.cols; j++)
+//                    std::cout << _depthImg.at<cv::Vec3f>(i,j)[0] << "," << _depthImg.at<cv::Vec3f>(i,j)[1] << "," << _depthImg.at<cv::Vec3f>(i,j)[2] << ","<<std::endl;
+//            std::cout <<" };" <<std::endl;
+//            std::cout <<"char colors[] ={"<< std::endl;
+//            cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
+//            for(i=0; i< gray2.rows; i++)
+//                for(int j=0; j<gray2.cols; j++)
+//                    std::cout << (int)_lastFrame.at<cv::Vec3b>(i,j)[0] <<"," <<(int)_lastFrame.at<cv::Vec3b>(i,j)[1] <<"," <<(int)_lastFrame.at<cv::Vec3b>(i,j)[2] <<","<< std::endl;
             
             //************ Omer **********
             //UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NULL message:@"Would you like to save?" delegate:self cancelButtonTitle:@"Discard" otherButtonTitles:@"save", nil];
@@ -329,20 +370,22 @@ static int TEN_K = 51200/8;
     }
 }
 
-#pragma mark -
-#pragma mark UIAlertViewDelegate
-
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex==1)
-        [self saveImage:[UIImage imageWithCVMat:_depthImg]];
-}
-
-- (IBAction)capturePressed:(UIButton *)sender 
+- (IBAction)capturePressed:(UIButton *)sender
 {
     [_sessionManager sendClick: self];
     [NSThread sleepForTimeInterval:self.waitPeriod];
     [self capture];
 }
+
+//
+//#pragma mark -
+//#pragma mark UIAlertViewDelegate
+//
+//- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+//{
+//    if (buttonIndex==1)
+//        [self saveImage:[UIImage imageWithCVMat:_depthImg]];
+//}
+//
 
 @end

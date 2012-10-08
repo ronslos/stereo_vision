@@ -104,14 +104,19 @@
 {
     NSIndexPath* indexPath = [self.tableView indexPathForCell:sender];
     NSDictionary * picture = [self.pictures objectAtIndex:indexPath.row];
-    NSString * url = [picture objectForKey:@"url"];
-    NSLog(@"url is %@" , url);
-    UIImage * img = [UIImage imageWithContentsOfFile:[picture objectForKey:@"url"]];
+//    NSString * url = [picture objectForKey:@"url"];
+//    NSLog(@"url is %@" , url);
+  //  UIImage * img = [UIImage imageWithContentsOfFile:[picture objectForKey:@"url"]];
+    NSString * depthUrl = [picture objectForKey:@"depth_url"];
+    NSData *data = [NSKeyedUnarchiver unarchiveObjectWithFile:depthUrl];
+    Vertex* vertices = (Vertex*)[data bytes];
+
     //UIImage * result = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/IMG_%d.%@", documentsDirectoryPath, imgNum ,@"jpg"]];
     if ([segue.identifier isEqualToString:@"moveToImage"]) 
     {
-        [segue.destinationViewController setImgName: [picture objectForKey:@"name"]];
-        [segue.destinationViewController setImage:img];
+        [segue.destinationViewController setVertices: vertices];
+        [segue.destinationViewController setVertexNumber:[data length]/(7*sizeof(float))];
+
     }
 }
 
