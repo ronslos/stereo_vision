@@ -25,33 +25,25 @@
     return self;
 }
 
-// Override default setter of pictures to enable reloading of the table
 /*
-- (void) setPictures:(NSMutableArray *)pictures
-{
-    if (_pictures != pictures) {
-        _pictures = pictures;
-        [self.tableView reloadData];
-    }
-}
+ Method      : viewDidLoad
+ Parameters  : 
+ Returns     :
+ Description : This method gets called automatically when this view controller is loaded to the screen.
+               It is used to initialize all the objects required for the functionality of this view.
  */
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+    // loading the session handler if the session exists
     _sessionManager = [SessionManager instance];
     if (_sessionManager.mySession != NULL)
     {
         [[_sessionManager mySession ] setDataReceiveHandler:self withContext:nil];
     }
     
+    // loading the saved array of taken pictures
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"pictures"] != NULL) {
         NSArray * savedArray = (NSArray*)[[NSUserDefaults standardUserDefaults] objectForKey:@"pictures"];
         self.pictures = [[NSMutableArray alloc] initWithArray:savedArray];
@@ -62,10 +54,17 @@
 
 }
 
+/*
+ Method      : viewDidUnload
+ Parameters  : 
+ Returns     :
+ Description : This method gets called automatically after this view controller is taken of the screen.
+               It is not called immediately, rather at an undetermined time.
+               It is used to release all the objects that were held by this viewcontroller.
+ */
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
     self.pictures = nil;
 }
 
@@ -74,10 +73,34 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
--(void) viewWillDisappear:(BOOL)animated {
+/*
+ Method      : viewWillAppear
+ Parameters  : 
+ Returns     :
+ Description : This method gets called automatically when an existing view controller re-appears on screen.
+               Used to retreive the session data handler from the view that was removed from screen.
+ */
+- (void)viewWillAppear:(BOOL)animated
+{
+    // if a session exists - set yourself as the data receive handler
+    if (_sessionManager.mySession != NULL) {
+        _sessionManager = [SessionManager instance];
+        [[_sessionManager mySession ] setDataReceiveHandler:self withContext:nil];
+    }
+    [super viewWillAppear:animated];
+}
+
+/*
+ Method      : viewWillDisappear
+ Parameters  : 
+ Returns     :
+ Description : This method gets called automatically just as this view controller is taken of the screen.
+               Used to perform tasks that must be done at the moment this view is being removed.
+ */
+-(void) viewWillDisappear:(BOOL)animated 
+{
+    // if back button was pressed, notify other device to move back as well
     if ([self.navigationController.viewControllers indexOfObject:self]==NSNotFound) {
-        // back button was pressed.  We know this is true because self is no longer
-        // in the navigation stack.  
         if (_sessionManager.mySession != NULL) {
             [_sessionManager sendMoveBackToMenu];
         }
@@ -96,20 +119,19 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    // ********** need to generate num_of_cells = num of photos inside the album ***********
     return [self.pictures count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // set the cell for each row in the table
     static NSString *CellIdentifier = @"Single Image Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Single Image Cell"];
     }
-    // Configure the cell...
-    // ***************** need to edit the attributes of the cell according to the releavant image **
+    // Configure the cell
     NSDictionary * picture = [self.pictures objectAtIndex:indexPath.row];
     cell.textLabel.text = [picture objectForKey:@"name"];
     cell.detailTextLabel.text = [picture objectForKey:@"date"];
@@ -121,7 +143,7 @@
     return cell;
 }
 
-
+// a cell was chosen - need to prepare the view controller we are segueing to with the correct image
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     NSIndexPath* indexPath = [self.tableView indexPathForCell:sender];
@@ -139,75 +161,54 @@
     }
 }
 
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
         // Delete the row from the data source
-        //[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         NSDictionary * picture = [self.pictures objectAtIndex:indexPath.row];
         NSURL * url = [NSURL URLWithString:[picture objectForKey:@"url"]];
-        NSLog(@"url is %@" , url);
         [[NSFileManager defaultManager] removeItemAtURL:url error:nil];
+        
+        // delete the records from the pictures array
         [self.pictures removeObjectAtIndex:indexPath.row];
         NSArray * savedArray = [[NSArray alloc] initWithArray:self.pictures];
         [[NSUserDefaults standardUserDefaults] setObject:savedArray forKey:@"pictures"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
+        // reload the pictures table
         [tableView reloadData];
 
     }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
 }
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // the segue is wired up directly into the tableViewCell
-    
 }
 
 #pragma mark -
 #pragma mark GKPeerPickerControllerDelegate
 
+/*
+ Method      : receiveData
+ Parameters  : (NSData *)data - the data received in the message
+               (NSString *)peer  - the peer sending us this data
+               (GKSession *)session - the session this peer belongs to
+ Returns     :
+ Description : This function gets called when a message is being received from the other device, and this view controller
+               is set as the data receive handler.
+ */
 - (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context
 {   
     NSString *whatDidIget = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
     if (![whatDidIget caseInsensitiveCompare:@"move to menu"])
     {
+        // need to move back to main menu
         [self.navigationController popViewControllerAnimated:YES];
-    }
-    else {
     }
 }
 

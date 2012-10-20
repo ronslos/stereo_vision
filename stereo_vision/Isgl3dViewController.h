@@ -15,7 +15,6 @@
 #import "isgl3d.h"
 
 
-
 @interface Isgl3dViewController : UIViewController <GKPeerPickerControllerDelegate>
 {
     DepthView* _depthView;

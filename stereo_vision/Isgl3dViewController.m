@@ -9,7 +9,6 @@
 #import "Isgl3dViewController.h"
 
 
-
 @implementation Isgl3dViewController
 
 @synthesize vertices = _vertices;

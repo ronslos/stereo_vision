@@ -1,3 +1,12 @@
+//
+//  Isgl3dDemoCameraController.m
+//  pointCloud
+//
+//  Created by Ron Slossberg on 10/7/12.
+//  Copyright 2012 __MyCompanyName__. All rights reserved.
+//
+
+
 #import "Isgl3dDemoCameraController.h"
 
 @interface Isgl3dDemoCameraController ()

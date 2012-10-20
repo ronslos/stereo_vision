@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 ronslos@gmail.com. All rights reserved.
 //
 
+#ifndef settingsviewcontroller_h_
+#define settingsviewcontroller_h_
+
 #import "UIImage+OpenCV.h"
 #import <UIKit/UIKit.h>
 #import "SessionManager.h"
@@ -59,3 +62,5 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *LeftRightControl;
 
 @end
+
+#endif

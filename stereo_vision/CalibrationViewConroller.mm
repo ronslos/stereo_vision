@@ -1,18 +1,12 @@
 //
-//  OpenCVClientViewController.m
-//  OpenCVClient
+//  CalibrationViewController.mm
 //
 //  Created by Robin Summerhill on 02/09/2011.
 //  Copyright 2011 Aptogo Limited. All rights reserved.
 //
-//  Permission is given to use this source code file without charge in any
-//  project, commercial or otherwise, entirely at your risk, with the condition
-//  that any redistribution (in part or whole) of source code must retain
-//  this copyright and permission notice. Attribution in compiled projects is
-//  appreciated but not required.
+//  Created by Ron Slossberg on 5/31/12.
+//  Copyright (c) 2012 ronslos@gmail.com. All rights reserved.
 //
-
-// UIImage extensions for converting between UIImage and cv::Mat
 
 #define MAX_CALIBRATION_IMAGES 20
 
@@ -44,6 +38,13 @@
 @synthesize interval = _interval;
 @synthesize rttTime = _rttTime;
 
+/*
+ Method      : viewDidLoad
+ Parameters  : 
+ Returns     :
+ Description : This method gets called automatically when this view controller is loaded to the screen.
+               It is used to initialize all the objects required for the functionality of this view.
+ */
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -103,8 +104,12 @@
     _calibrating = NO;
     _imagePoints[0].resize(MAX_CALIBRATION_IMAGES);
     _imagePoints[1].resize(MAX_CALIBRATION_IMAGES);
+    
+    // getting the handle for the session object
     _sessionManager = [SessionManager instance];
     [[_sessionManager mySession ] setDataReceiveHandler:self withContext:nil];
+    
+    // loading the pre-calculated delay period of sending the capture indication to the other device
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"timeDelay"] != NULL) {
         self.waitPeriod = [(NSNumber*)[[NSUserDefaults standardUserDefaults] objectForKey:@"timeDelay"] doubleValue];
     }
@@ -112,8 +117,9 @@
         self.waitPeriod = 0;
     }
     
-    NSLog(@"wait period value when loaded: %f", self.waitPeriod); // debug
+    // NSLog(@"wait period value when loaded: %f", self.waitPeriod); // debug
     
+    // starting new calculation of the wait period - if results are highky different from pre-calculated value, new value will be used
     _rttCount = 0;
     _rttGap = 0;
     self.rtts = [NSMutableArray arrayWithCapacity:5];
@@ -128,6 +134,12 @@
     
 }
 
+/*
+ Method      : showCaptureOnScreen
+ Parameters  : 
+ Returns     :
+ Description : 
+ */
 -(void)showCaptureOnScreen
 {
     sleep(2);
@@ -152,6 +164,14 @@
     dispatch_release(myQueue);
 }
 
+/*
+ Method      : viewDidUnload
+ Parameters  : 
+ Returns     :
+ Description : This method gets called automatically after this view controller is taken of the screen.
+               It is not called immediately, rather at an undetermined time.
+               It is used to release all the objects that were held by this viewcontroller.
+ */
 - (void)viewDidUnload
 {
     [self setActivityIndicator:nil];
@@ -166,23 +186,21 @@
     _videoCapture->release();
 }
 
--(void) viewWillDisappear:(BOOL)animated {
+/*
+ Method      : viewWillDisappear
+ Parameters  : 
+ Returns     :
+ Description : This method gets called automatically just as this view controller is taken of the screen.
+               Used to perform tasks that must be done at the moment this view is being removed.
+ */
+-(void) viewWillDisappear:(BOOL)animated 
+{
+    // if back button was pressed, notify other device to move back as well
     if ([self.navigationController.viewControllers indexOfObject:self]==NSNotFound) {
-        // back button was pressed.  We know this is true because self is no longer
-        // in the navigation stack.  
         [_sessionManager sendMoveBackToMenu];
     }
     [super viewWillDisappear:animated];
 }
-
-/*
--(void) viewDidDisappear:(BOOL)animated {
-    delete _videoCapture;
-    _videoCapture->release();
-    _videoCapture = nil;
-    _imagePoints->clear();
-}
-*/
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -190,6 +208,12 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+/*
+ Method      : Calibrate
+ Parameters  : (UIButton *)sender
+ Returns     :
+ Description : Action for the calibrate button.
+ */
 - (IBAction)Calibrate:(UIButton *)sender
 {
     
@@ -204,7 +228,7 @@
     _calibrating = YES;
     dispatch_queue_t myQueue = dispatch_queue_create("my calibration thread", NULL);
     [self.activityIndicator startAnimating];
-    // self.calibLabel.text = @"Calibrating...";
+    
     [self.captureBtn setEnabled:NO];
     [self.calibrationButton setEnabled:NO];
     [_sessionManager sendDisableCapture:self];
@@ -216,7 +240,7 @@
             NSString* message = [NSString stringWithFormat:@"Calibration Completed with rms %f" ,rms];
             UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Calibration" message: message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
             [alert show];
-            // need to decide weather to check before re-enabling the capture button
+
             [self.captureBtn setEnabled:YES];
             [self.calibrationButton setEnabled:YES];
             _calibrating = NO;
@@ -224,11 +248,15 @@
         });
         
     });
-    
     dispatch_release(myQueue);
 }
 
-
+/*
+ Method      : capture
+ Parameters  :
+ Returns     :
+ Description : 
+ */
 -(void) capture
 {
     if (_videoCapture && _videoCapture->grab())
@@ -242,11 +270,15 @@
         dispatch_async(myQueue, ^{
             UIImage* corners = [self findCorners];
             dispatch_sync(dispatch_get_main_queue(), ^{
+                
+                // indicate that corners extraction calculation is finished
+                // if other device finished as well, re-enable the buttons
                 _finishedCapture = YES;
                 if (_otherFinishedCapture == YES) {
                     [self.captureBtn setEnabled:YES];
                     [self.calibrationButton setEnabled:YES];
                 }
+                
                 self.imageView.image = corners;
             });
             _notCapturing = YES;
@@ -260,7 +292,12 @@
     }
 }
 
-// Perform image processing on the last captured frame and display the results
+/*
+ Method      : findCorners
+ Parameters  : 
+ Returns     : The image with the extracted corners pattern
+ Description : Perform image processing on the last captured frame and display the results.
+ */
 - (UIImage *)findCorners
 {
     cv::Mat grayFrame, cornersImg;
@@ -281,18 +318,32 @@
 
 }
 
-// Called when the user taps the Capture button. Grab a frame and process it
+/*
+ Method      : capturePressed
+ Parameters  : (UIButton *)sender
+ Returns     :
+ Description : Action for the capture button.
+ */
 - (IBAction)capturePressed:(UIButton *)sender
 {
+    // disable buttons and initialize capture process indicators to NO
     [self.captureBtn setEnabled:NO];
     [self.calibrationButton setEnabled:NO];
     _finishedCapture = NO;
     _otherFinishedCapture = NO;
+    
+    // send capture indication to the other device and wait the pre-calculated delay period
     [_sessionManager sendClick: self];
     [NSThread sleepForTimeInterval:self.waitPeriod];
     [self capture];
 }
 
+/*
+ Method      : dataFromVector
+ Parameters  : (cv::vector<cv::Point2f>*) vector - the vector of the corners locations
+ Returns     :
+ Description :
+ */
 -(NSData*) dataFromVector:(cv::vector<cv::Point2f>*) vector
 {
     NSUInteger size = vector->size();
@@ -308,6 +359,13 @@
     return data;
 }
 
+/*
+ Method      : fillVectorFromData
+ Parameters  : (NSData *) data - 
+               (cv::vector<cv::Point2f>*) vector - 
+ Returns     :
+ Description :
+ */
 -(void) fillVectorFromData: (NSData *) data :(cv::vector<cv::Point2f>*) vector
 {
     NSMutableArray* array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
@@ -327,15 +385,26 @@
 #pragma mark -
 #pragma mark GKPeerPickerControllerDelegate
 
+/*
+ Method      : receiveData
+ Parameters  : (NSData *)data - the data received in the message
+               (NSString *)peer  - the peer sending us this data
+               (GKSession *)session - the session this peer belongs to
+ Returns     :
+ Description : This function gets called when a message is being received from the other device, and this view controller
+               is set as the data receive handler.
+ */
 - (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context
 {   
     NSString *whatDidIget = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+    
     if(![whatDidIget caseInsensitiveCompare:@"capture"])
     {
         if (_calibrating) {
             // do nothing since this device is in the middle of calibrating
         }
         else {
+            // disable buttons and perform capture process
             [self.captureBtn setEnabled:NO];
             [self.calibrationButton setEnabled:NO];
             _finishedCapture = NO;
@@ -353,7 +422,7 @@
             [self.captureBtn setEnabled:NO];
         }
     }
-    else if (![whatDidIget caseInsensitiveCompare:@"EnableCapture"])
+    else if (![whatDidIget caseInsensitiveCompare:@"enableCapture"])
     {
         if (_calibrating) {
             // I'm also calibrating so nothing is to be done
@@ -365,10 +434,12 @@
     }
     else if (![whatDidIget caseInsensitiveCompare:@"move to menu"])
     {
+        // need to move back to main menu
         [self.navigationController popViewControllerAnimated:YES];
     }
     else if (![whatDidIget caseInsensitiveCompare:@"update delay"])
     {
+        // received delay calculation message - need to send response
         [_sessionManager sendUpdateDelayResponse:self];
         
         // patch in case the other device missed your first message
@@ -381,16 +452,16 @@
     }
     else if (![whatDidIget caseInsensitiveCompare:@"update delay response"])
     {
+        // received calculation delay response - need to take a timestamp
         self.interval = CACurrentMediaTime();
         self.rttTime = self.interval - self.start;
         NSNumber * val = [NSNumber numberWithDouble:self.rttTime];
         [self.rtts insertObject:val atIndex:_rttCount];
         _rttCount++;
         if (_rttCount == 5) {
-            // perform calculation of delay time
+            // has 5 rtt values, performing calculation of delay time
             self.waitPeriod = [TimeDelayCalculation calculateUpdatedDelay:self.rtts withPrevDelay:self.waitPeriod];
             // this value is calculated locally, therfore not synchronized back to NSUserDefaults
-            NSLog(@"wait period value after re-calculating: %f", self.waitPeriod); // debug
         }
         else {
             // send another timestamp message
@@ -399,9 +470,12 @@
         }
         
     }
-    // received data
+    
+    // received data object
     else
     {
+        // indicate other device finished extracting corners
+        // If I also finished - re-enable the buttons
         _otherFinishedCapture = YES;
         if (_finishedCapture == YES) {
             [self.captureBtn setEnabled:YES];
@@ -409,7 +483,6 @@
         }
         [self fillVectorFromData:data :&(_imagePoints[1][_otherImageCount]) ];
         _otherImageCount ++ ; 
-        // NSLog(@"Other image count is %d",_otherImageCount); // debug
     }
 }
 

@@ -1,9 +1,21 @@
+//
+//  Isgl3dDemoCameraController.h
+//  pointCloud
+//
+//  Created by Ron Slossberg on 10/7/12.
+//  Copyright 2012 __MyCompanyName__. All rights reserved.
+//
+
+#ifndef isgldemocameracontroller_h_
+#define isgldemocameracontroller_h_
+
 #import "isgl3d.h"
 
 
-@interface Isgl3dDemoCameraController : NSObject <Isgl3dTouchScreenResponder> {
-
+@interface Isgl3dDemoCameraController : NSObject <Isgl3dTouchScreenResponder> 
+{
 @private
+    
 	Isgl3dCamera * _camera;
 	Isgl3dView * _view;
 	
@@ -32,3 +44,5 @@
 - (void) update;
 
 @end
+
+#endif

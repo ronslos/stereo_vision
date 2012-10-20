@@ -9,7 +9,7 @@
 #ifndef reconstructionviewcontroller_h_
 #define reconstructionviewcontroller_h_
 
-#include "File.h"
+#include "OpenCVCalculations.h"
 #import "SessionManager.h"
 #import "TimeDelayCalculation.h"
 #import <QuartzCore/CAAnimation.h>
@@ -17,7 +17,6 @@
 #import <UIKit/UIKit.h>
 
 @interface ReconstructionViewController : UIViewController <GKPeerPickerControllerDelegate>
-
 {
     cv::VideoCapture *_videoCapture;
     cv::Size _imageSize;

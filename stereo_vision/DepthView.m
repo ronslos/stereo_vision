@@ -1,5 +1,5 @@
 //
-//  HelloWorldView.m
+//  DepthView.m
 //  pointCloud
 //
 //  Created by Ron Slossberg on 10/7/12.
@@ -18,14 +18,6 @@
 }
 
 -(void) createScene {
-    // Translate the camera.
-    
-
-//    _cameraController.theta = 30;
-//    _cameraController.phi = 30;
-    //_cameraController.doubleTapEnabled = NO;
-//    [self.camera setPosition:iv3(0.0, 2.0, 1000.0)];
-  //  [self.camera setFar:2000.0];
     
     Isgl3dTextureMaterial *  spriteMaterial = [Isgl3dTextureMaterial materialWithTextureFile:@"particle.png" shininess:0.9 precision:Isgl3dTexturePrecisionMedium repeatX:NO repeatY:NO];
     Isgl3dParticleSystem* particleSystem = [Isgl3dParticleSystem particleSystem];

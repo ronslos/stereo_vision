@@ -13,7 +13,6 @@
 #import "Isgl3dViewController.h"
 #import "SessionManager.h"
 
-
 @interface LibraryViewController : UITableViewController <GKPeerPickerControllerDelegate>
 {
     SessionManager* _sessionManager;
