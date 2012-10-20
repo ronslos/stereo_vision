@@ -46,6 +46,12 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+    _sessionManager = [SessionManager instance];
+    if (_sessionManager.mySession != NULL)
+    {
+        [[_sessionManager mySession ] setDataReceiveHandler:self withContext:nil];
+    }
+    
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"pictures"] != NULL) {
         NSArray * savedArray = (NSArray*)[[NSUserDefaults standardUserDefaults] objectForKey:@"pictures"];
         self.pictures = [[NSMutableArray alloc] initWithArray:savedArray];
@@ -66,6 +72,17 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+-(void) viewWillDisappear:(BOOL)animated {
+    if ([self.navigationController.viewControllers indexOfObject:self]==NSNotFound) {
+        // back button was pressed.  We know this is true because self is no longer
+        // in the navigation stack.  
+        if (_sessionManager.mySession != NULL) {
+            [_sessionManager sendMoveBackToMenu];
+        }
+    }
+    [super viewWillDisappear:animated];
 }
 
 #pragma mark - Table view data source
@@ -96,6 +113,11 @@
     NSDictionary * picture = [self.pictures objectAtIndex:indexPath.row];
     cell.textLabel.text = [picture objectForKey:@"name"];
     cell.detailTextLabel.text = [picture objectForKey:@"date"];
+    
+    // setting display of picture inside table view cell
+    NSString * url = [picture objectForKey:@"url"];
+    cell.imageView.image = [UIImage imageWithContentsOfFile:url];
+    
     return cell;
 }
 
@@ -104,14 +126,11 @@
 {
     NSIndexPath* indexPath = [self.tableView indexPathForCell:sender];
     NSDictionary * picture = [self.pictures objectAtIndex:indexPath.row];
-//    NSString * url = [picture objectForKey:@"url"];
-//    NSLog(@"url is %@" , url);
-  //  UIImage * img = [UIImage imageWithContentsOfFile:[picture objectForKey:@"url"]];
+
     NSString * depthUrl = [picture objectForKey:@"depth_url"];
     NSData *data = [NSKeyedUnarchiver unarchiveObjectWithFile:depthUrl];
     Vertex* vertices = (Vertex*)[data bytes];
 
-    //UIImage * result = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/IMG_%d.%@", documentsDirectoryPath, imgNum ,@"jpg"]];
     if ([segue.identifier isEqualToString:@"moveToImage"]) 
     {
         [segue.destinationViewController setVertices: vertices];
@@ -174,9 +193,22 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // ******** navigation code before showing the picture ************
-    //id picture = [self.pictures objectAtIndex:indexPath.row];
+    // the segue is wired up directly into the tableViewCell
     
+}
+
+#pragma mark -
+#pragma mark GKPeerPickerControllerDelegate
+
+- (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context
+{   
+    NSString *whatDidIget = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+    if (![whatDidIget caseInsensitiveCompare:@"move to menu"])
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    else {
+    }
 }
 
 @end

@@ -84,6 +84,13 @@
 - (void) viewDidLoad{
 	
     [super viewDidLoad];
+    
+    _sessionManager = [SessionManager instance];
+    if (_sessionManager.mySession != NULL)
+    {
+        [[_sessionManager mySession ] setDataReceiveHandler:self withContext:nil];
+    }
+    
 	// Instantiate the Isgl3dDirector and set background color
 	[Isgl3dDirector sharedInstance].backgroundColorString = @"333333ff";
     
@@ -165,6 +172,19 @@
 - (void) didReceiveMemoryWarning {
     [[Isgl3dDirector sharedInstance] onMemoryWarning];
     [super didReceiveMemoryWarning];
+}
+
+#pragma mark -
+#pragma mark GKPeerPickerControllerDelegate
+
+- (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context
+{   
+    // this function does NOTHING in this view controller
+    
+    // session manager control was added here as a patch to handle the case in which one device returns from the photo library to the main 
+    // menu, and the other device is still watching a photo.
+    // In that case, we don't want the second device to be pulled back to the main menu as well.
+    // Therefore, we set this view controller to be the DataReceivedHandler, but we don't react on any message that is arriving.
 }
 
 @end

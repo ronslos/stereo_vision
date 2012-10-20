@@ -11,6 +11,8 @@
 
 #include "File.h"
 #import "SessionManager.h"
+#import "TimeDelayCalculation.h"
+#import <QuartzCore/CAAnimation.h>
 #import <AVFoundation/AVCaptureDevice.h>
 #import <UIKit/UIKit.h>
 
@@ -28,14 +30,22 @@
     int _imageCount;
     int _otherImageCount;
     bool _notCapturing;
+    bool _finishedCapture;
+    bool _otherFinishedCapture;
+    bool _calibrating;
     SessionManager* _sessionManager;
+    
+    int _rttCount;
+    int _rttGap;
 }
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIButton *calibrationButton;
 @property (weak, nonatomic) IBOutlet UIButton *captureBtn;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (nonatomic) double waitPeriod;
+
+
+
 
 - (IBAction)Calibrate:(UIButton *)sender;
 - (IBAction)capturePressed:(UIButton *)sender;

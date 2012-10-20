@@ -15,6 +15,7 @@
 		176342B215BAE13100AAD6E4 /* bright_bg_img2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 176342AF15BAE13100AAD6E4 /* bright_bg_img2.jpeg */; };
 		176342B315BAE13100AAD6E4 /* bright_bg_img3.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 176342B015BAE13100AAD6E4 /* bright_bg_img3.jpeg */; };
 		1772E8A21614DD0F003DCD6F /* ImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1772E8A11614DD0F003DCD6F /* ImageViewController.m */; };
+		17855DC41632A426006C6CEB /* TimeDelayCalculation.m in Sources */ = {isa = PBXBuildFile; fileRef = 17855DC31632A426006C6CEB /* TimeDelayCalculation.m */; };
 		17C6A00415B5B02100372355 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C6A00315B5B02100372355 /* UIKit.framework */; };
 		17C6A00615B5B02100372355 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C6A00515B5B02100372355 /* Foundation.framework */; };
 		17C6A00815B5B02100372355 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C6A00715B5B02100372355 /* CoreGraphics.framework */; };
@@ -73,6 +74,8 @@
 		176342B015BAE13100AAD6E4 /* bright_bg_img3.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bright_bg_img3.jpeg; sourceTree = "<group>"; };
 		1772E8A01614DD0F003DCD6F /* ImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageViewController.h; sourceTree = "<group>"; };
 		1772E8A11614DD0F003DCD6F /* ImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageViewController.m; sourceTree = "<group>"; };
+		17855DC21632A426006C6CEB /* TimeDelayCalculation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimeDelayCalculation.h; path = ../TimeDelayCalculation.h; sourceTree = "<group>"; };
+		17855DC31632A426006C6CEB /* TimeDelayCalculation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimeDelayCalculation.m; path = ../TimeDelayCalculation.m; sourceTree = "<group>"; };
 		17C69FFF15B5B02100372355 /* stereo_vision.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stereo_vision.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17C6A00315B5B02100372355 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		17C6A00515B5B02100372355 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -240,6 +243,8 @@
 				17C6A03415B5C67200372355 /* manageCVMat.mm */,
 				17C6A03515B5C67200372355 /* SessionManager.h */,
 				17C6A03615B5C67200372355 /* SessionManager.mm */,
+				17855DC21632A426006C6CEB /* TimeDelayCalculation.h */,
+				17855DC31632A426006C6CEB /* TimeDelayCalculation.m */,
 				176342A715B9ADEC00AAD6E4 /* ResponseFromSession.h */,
 				17C6A03715B5C67200372355 /* UIImage+OpenCV.h */,
 				17C6A03815B5C67200372355 /* UIImage+OpenCV.mm */,
@@ -365,6 +370,7 @@
 				C5A447FE1621B56200490911 /* Isgl3dViewController.m in Sources */,
 				C5A447FF1621B56200490911 /* DepthView.m in Sources */,
 				C5A4484816223ECA00490911 /* Isgl3dDemoCameraController.m in Sources */,
+				17855DC41632A426006C6CEB /* TimeDelayCalculation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

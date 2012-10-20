@@ -20,6 +20,12 @@
 
 @interface CalibrationViewController() 
 
+@property (nonatomic) double start;
+@property (nonatomic) double interval;
+@property (nonatomic) double rttTime;
+@property (nonatomic, strong) NSMutableArray * rtts;
+@property (nonatomic) double waitPeriod;
+
 - (UIImage*) findCorners;
 - (NSData*) dataFromVector:(cv::vector<cv::Point2f>*) vector;
  
@@ -31,7 +37,12 @@
 @synthesize calibrationButton = _calibrationButton;
 @synthesize captureBtn = _captureBtn;
 @synthesize activityIndicator = _activityIndicator;
+
 @synthesize waitPeriod = _waitPeriod;
+@synthesize rtts = _rtts;
+@synthesize start = _start;
+@synthesize interval = _interval;
+@synthesize rttTime = _rttTime;
 
 - (void)viewDidLoad
 {
@@ -87,6 +98,9 @@
     _boardSize = cv::Size(boardWidth,boardHeight);
     _imageCount = 0;
     _otherImageCount = 0;
+    _finishedCapture = YES;
+    _otherFinishedCapture = YES;
+    _calibrating = NO;
     _imagePoints[0].resize(MAX_CALIBRATION_IMAGES);
     _imagePoints[1].resize(MAX_CALIBRATION_IMAGES);
     _sessionManager = [SessionManager instance];
@@ -98,8 +112,18 @@
         self.waitPeriod = 0;
     }
     
+    NSLog(@"wait period value when loaded: %f", self.waitPeriod); // debug
+    
+    _rttCount = 0;
+    _rttGap = 0;
+    self.rtts = [NSMutableArray arrayWithCapacity:5];
+    
+    [NSThread sleepForTimeInterval:0.5];
+    self.start = CACurrentMediaTime();
+    [_sessionManager sendUpdateDelay:self];
+    
     [self.activityIndicator stopAnimating];
-    [self.activityIndicator setHidesWhenStopped:YES];    
+    [self.activityIndicator setHidesWhenStopped:YES];
     [self showCaptureOnScreen];
     
 }
@@ -139,6 +163,7 @@
     [super viewDidUnload];
     self.imageView = nil;
     self.captureBtn = nil;
+    _videoCapture->release();
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
@@ -150,25 +175,14 @@
     [super viewWillDisappear:animated];
 }
 
+/*
 -(void) viewDidDisappear:(BOOL)animated {
-//    delete _videoCapture;
+    delete _videoCapture;
     _videoCapture->release();
     _videoCapture = nil;
     _imagePoints->clear();
 }
-
-/*
--(void)willMoveToParentViewController:(UIViewController *)parent
-{
-    [[_sessionManager mySession ] setDataReceiveHandler:self.navigationController.parentViewController withContext:nil];
-}
-
-
-- (void) viewWillDisappear:(BOOL)animated
-{
-    [[_sessionManager mySession ] setDataReceiveHandler:self.navigationController.presentingViewController withContext:nil];
-}
- */
+*/
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -182,15 +196,18 @@
     if( _imageCount != _otherImageCount)
     {
         _imageCount = 0;
-        _otherImageCount =0;
+        _otherImageCount = 0;
         return;
         
     }
     
+    _calibrating = YES;
     dispatch_queue_t myQueue = dispatch_queue_create("my calibration thread", NULL);
     [self.activityIndicator startAnimating];
+    // self.calibLabel.text = @"Calibrating...";
     [self.captureBtn setEnabled:NO];
     [self.calibrationButton setEnabled:NO];
+    [_sessionManager sendDisableCapture:self];
     dispatch_async(myQueue, ^{
         _objectPoints.resize(_imageCount);
         double rms =  calibrateCameras( _boardSize,_imagePoints, _objectPoints, _imageCount , _imageSize, _squareHeight, _squareWidth);
@@ -199,8 +216,11 @@
             NSString* message = [NSString stringWithFormat:@"Calibration Completed with rms %f" ,rms];
             UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Calibration" message: message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
             [alert show];
+            // need to decide weather to check before re-enabling the capture button
             [self.captureBtn setEnabled:YES];
             [self.calibrationButton setEnabled:YES];
+            _calibrating = NO;
+            [_sessionManager sendEnableCapture:self];
         });
         
     });
@@ -217,12 +237,16 @@
         _notCapturing = NO;
         (*_videoCapture) >> _lastFrame;
         cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
-         [self.captureBtn setEnabled:NO];
+        // [self.captureBtn setEnabled:NO];
         dispatch_queue_t myQueue = dispatch_queue_create("my op thread", NULL);
         dispatch_async(myQueue, ^{
             UIImage* corners = [self findCorners];
             dispatch_sync(dispatch_get_main_queue(), ^{
-                [self.captureBtn setEnabled:YES];
+                _finishedCapture = YES;
+                if (_otherFinishedCapture == YES) {
+                    [self.captureBtn setEnabled:YES];
+                    [self.calibrationButton setEnabled:YES];
+                }
                 self.imageView.image = corners;
             });
             _notCapturing = YES;
@@ -260,6 +284,10 @@
 // Called when the user taps the Capture button. Grab a frame and process it
 - (IBAction)capturePressed:(UIButton *)sender
 {
+    [self.captureBtn setEnabled:NO];
+    [self.calibrationButton setEnabled:NO];
+    _finishedCapture = NO;
+    _otherFinishedCapture = NO;
     [_sessionManager sendClick: self];
     [NSThread sleepForTimeInterval:self.waitPeriod];
     [self capture];
@@ -304,14 +332,81 @@
     NSString *whatDidIget = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
     if(![whatDidIget caseInsensitiveCompare:@"capture"])
     {
-        [self capture];
+        if (_calibrating) {
+            // do nothing since this device is in the middle of calibrating
+        }
+        else {
+            [self.captureBtn setEnabled:NO];
+            [self.calibrationButton setEnabled:NO];
+            _finishedCapture = NO;
+            _otherFinishedCapture = NO;
+            [self capture];
+        }
+    }
+    else if (![whatDidIget caseInsensitiveCompare:@"disableCapture"])
+    {
+        if (_calibrating) {
+            // I'm also calibrating so nothing is to be done
+        }
+        else {
+            // I'm not calibrating - so don't allow anyone to capture with this device
+            [self.captureBtn setEnabled:NO];
+        }
+    }
+    else if (![whatDidIget caseInsensitiveCompare:@"EnableCapture"])
+    {
+        if (_calibrating) {
+            // I'm also calibrating so nothing is to be done
+        }
+        else {
+            // I'm not calibrating - so allow capture to be pressed again
+            [self.captureBtn setEnabled:YES];
+        }
     }
     else if (![whatDidIget caseInsensitiveCompare:@"move to menu"])
     {
         [self.navigationController popViewControllerAnimated:YES];
     }
+    else if (![whatDidIget caseInsensitiveCompare:@"update delay"])
+    {
+        [_sessionManager sendUpdateDelayResponse:self];
+        
+        // patch in case the other device missed your first message
+        if (_rttCount == 0) {
+            _rttGap++;
+            if (_rttGap > 3){
+                [_sessionManager sendUpdateDelay: self];
+            }
+        }
+    }
+    else if (![whatDidIget caseInsensitiveCompare:@"update delay response"])
+    {
+        self.interval = CACurrentMediaTime();
+        self.rttTime = self.interval - self.start;
+        NSNumber * val = [NSNumber numberWithDouble:self.rttTime];
+        [self.rtts insertObject:val atIndex:_rttCount];
+        _rttCount++;
+        if (_rttCount == 5) {
+            // perform calculation of delay time
+            self.waitPeriod = [TimeDelayCalculation calculateUpdatedDelay:self.rtts withPrevDelay:self.waitPeriod];
+            // this value is calculated locally, therfore not synchronized back to NSUserDefaults
+            NSLog(@"wait period value after re-calculating: %f", self.waitPeriod); // debug
+        }
+        else {
+            // send another timestamp message
+            self.start = CACurrentMediaTime();
+            [_sessionManager sendUpdateDelay: self];
+        }
+        
+    }
+    // received data
     else
     {
+        _otherFinishedCapture = YES;
+        if (_finishedCapture == YES) {
+            [self.captureBtn setEnabled:YES];
+            [self.calibrationButton setEnabled:YES];
+        }
         [self fillVectorFromData:data :&(_imagePoints[1][_otherImageCount]) ];
         _otherImageCount ++ ; 
         // NSLog(@"Other image count is %d",_otherImageCount); // debug

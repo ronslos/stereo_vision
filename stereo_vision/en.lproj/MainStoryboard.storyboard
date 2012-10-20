@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2549" systemVersion="12C54" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="dky-Gc-Wab">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11G63" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="dky-Gc-Wab">
     <dependencies>
         <deployment defaultVersion="1296" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1498"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1181"/>
     </dependencies>
     <scenes>
         <!--View Controller - Main Menu-->
@@ -75,29 +75,11 @@
                                     <action selector="reconstructPressed" destination="2" eventType="touchUpInside" id="SDY-xN-K3b"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="vhU-dW-N1u">
-                                <rect key="frame" x="88" y="415" width="144" height="37"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fIO-2s-HwR">
+                                <rect key="frame" x="88" y="283" width="144" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="3D Album">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="reconstructionPressed:" destination="2" eventType="touchUpInside" id="5H0-Ij-SHO"/>
-                                </connections>
-                            </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="3dscanner.png" id="dJi-jD-Slx">
-                                <rect key="frame" x="60" y="0.0" width="201" height="97"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5a7-F9-OCw">
-                                <rect key="frame" x="88" y="284" width="145" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="3D Photo Library" backgroundImage="blue bgi.jpeg">
+                                <state key="normal" title="Photo Library" backgroundImage="blue bgi.jpeg">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -105,17 +87,24 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="gk9-AZ-CGC" kind="push" identifier="moveToLibrary" id="2sj-2x-qGE"/>
+                                    <action selector="photoLibraryPressed" destination="2" eventType="touchUpInside" id="1Wu-Fi-EUQ"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="3dscanner.png" id="dJi-jD-Slx">
+                                <rect key="frame" x="60" y="0.0" width="201" height="97"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Main Menu" id="FPC-7d-dml"/>
+                    <navigationItem key="navigationItem" title="Main Menu" id="FPC-7d-dml">
+                        <barButtonItem key="backBarButtonItem" title="Main Menu" id="XvJ-vS-cik"/>
+                    </navigationItem>
                     <connections>
                         <segue destination="DMn-qd-0fy" kind="push" identifier="moveToCalibrate" id="k1g-IM-a3c"/>
                         <segue destination="RhT-IB-rJm" kind="push" identifier="moveToReconstruction" id="n64-m3-N0U"/>
                         <segue destination="USo-R2-8XB" kind="push" identifier="moveToSettings" id="VCL-40-qAL"/>
+                        <segue destination="gk9-AZ-CGC" kind="push" identifier="moveToLibrary" id="ULv-Wh-G0j"/>
                     </connections>
                 </viewController>
             </objects>
@@ -160,9 +149,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Reconstruction" id="luZ-tM-YhM">
-                        <barButtonItem key="backBarButtonItem" title="Main Menu" id="dBf-gi-MMy"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Reconstruction" id="luZ-tM-YhM"/>
                     <connections>
                         <outlet property="captureBtn" destination="Bp8-F7-zc3" id="MJA-1N-Tb5"/>
                         <outlet property="imageView" destination="n91-0F-Gix" id="vbF-AR-Qke"/>
@@ -177,27 +164,27 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sro-qt-zIT" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="gk9-AZ-CGC" customClass="LibraryViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="8kn-wu-zeK">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="98" sectionHeaderHeight="22" sectionFooterHeight="22" id="8kn-wu-zeK">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Single Image Cell" textLabel="TbL-Un-AEp" detailTextLabel="jig-Zd-ERy" style="IBUITableViewCellStyleSubtitle" id="5cB-WM-og2">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Single Image Cell" textLabel="TbL-Un-AEp" detailTextLabel="jig-Zd-ERy" rowHeight="98" style="IBUITableViewCellStyleSubtitle" id="5cB-WM-og2">
+                                <rect key="frame" x="0.0" y="22" width="320" height="98"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="97"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="TbL-Un-AEp">
-                                            <rect key="frame" x="10" y="2" width="38" height="22"/>
+                                            <rect key="frame" x="10" y="29" width="38" height="22"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jig-Zd-ERy">
-                                            <rect key="frame" x="10" y="24" width="47" height="18"/>
+                                            <rect key="frame" x="10" y="51" width="47" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
@@ -217,7 +204,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="3D Photo Album" id="6QV-4z-4Ky">
-                        <barButtonItem key="backBarButtonItem" title="Main Menu" id="4O1-su-Ayj"/>
+                        <barButtonItem key="backBarButtonItem" title="3D Photo Album" id="4O1-su-Ayj"/>
                     </navigationItem>
                 </tableViewController>
             </objects>
@@ -233,9 +220,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Selected Image" id="r8K-bg-ziL">
-                        <barButtonItem key="backBarButtonItem" title="3D Photo Album" id="ULG-bG-hUr"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Selected Image" id="r8K-bg-ziL"/>
                 </viewController>
             </objects>
             <point key="canvasLocation" x="1921" y="-1031"/>
@@ -625,9 +610,7 @@
                         </subviews>
                         <inset key="scrollIndicatorInsets" minX="0.0" minY="100" maxX="0.0" maxY="0.0"/>
                     </scrollView>
-                    <navigationItem key="navigationItem" title="Settings" id="WIK-Lb-w6Z">
-                        <barButtonItem key="backBarButtonItem" title="Main Menu" id="uO8-3A-kgn"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Settings" id="WIK-Lb-w6Z"/>
                     <connections>
                         <outlet property="E1_1" destination="e9Q-Tw-Gkj" id="bMN-3e-jFl"/>
                         <outlet property="E1_2" destination="CB1-4t-7kT" id="oZo-oG-vmb"/>
@@ -718,6 +701,14 @@
                                     <action selector="Calibrate:" destination="DMn-qd-0fy" eventType="touchUpInside" id="R9h-vU-DU4"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="PBK-N9-xKO">
+                                <rect key="frame" x="108" y="142" width="104" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
@@ -762,6 +753,90 @@
         <image name="blue bgi.jpeg" width="284" height="177"/>
         <image name="bright_bg_img3.jpeg" width="225" height="225"/>
     </resources>
+    <classes>
+        <class className="CalibrationViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/CalibrationViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="Calibrate:" candidateClass="UIButton"/>
+                <relationship kind="action" name="capturePressed:" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="calibLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="calibrationButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="captureBtn" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
+            </relationships>
+        </class>
+        <class className="Isgl3dViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/Isgl3dViewController.h"/>
+        </class>
+        <class className="LibraryViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/LibraryViewController.h"/>
+        </class>
+        <class className="ReconstructionViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ReconstructionViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="capturePressed:" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="captureBtn" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="pickAlg" candidateClass="UISegmentedControl"/>
+            </relationships>
+        </class>
+        <class className="SettingsViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SettingsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="LeftRightControlChanged:" candidateClass="UISegmentedControl"/>
+                <relationship kind="action" name="saveHeight:" candidateClass="UITextField"/>
+                <relationship kind="action" name="saveSquareHeight:" candidateClass="UITextField"/>
+                <relationship kind="action" name="saveSquareWidth:" candidateClass="UITextField"/>
+                <relationship kind="action" name="saveWidth:" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="E1_1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="E1_2" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="E1_3" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="E2_1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="E2_2" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="E2_3" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="E3_1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="E3_2" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="E3_3" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="F1_1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="F1_2" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="F1_3" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="F2_1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="F2_2" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="F2_3" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="F3_1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="F3_2" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="F3_3" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="LeftRightControl" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="R1_1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="R1_2" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="R1_3" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="R2_1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="R2_2" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="R2_3" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="R3_1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="R3_2" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="R3_3" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="T1_1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="T2_1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="T3_1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="boardHeight" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="boardWidth" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="squareHeight" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="squareWidth" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="ViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="calibratePressed"/>
+                <relationship kind="action" name="connectPressed"/>
+                <relationship kind="action" name="photoLibraryPressed"/>
+                <relationship kind="action" name="reconstructPressed"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

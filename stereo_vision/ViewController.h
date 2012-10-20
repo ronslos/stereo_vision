@@ -19,6 +19,7 @@
 - (IBAction)connectPressed;
 - (IBAction)calibratePressed;
 - (IBAction)reconstructPressed;
+- (IBAction)photoLibraryPressed;
 
 - (void) endedConnectionPhase;
 

@@ -101,6 +101,14 @@
     
 }
 
+- (IBAction)photoLibraryPressed {
+    // move to settings, and move other iPhone as well if connected
+    if (self.isConnected) {
+        [_sessionManager sendMoveToLibrary:self];
+    }
+    [self performSegueWithIdentifier:@"moveToLibrary" sender:self];
+}
+
 - (IBAction)settingsPressed {
     // move to settings, and move other iPhone as well if connected
     if (self.isConnected) {
@@ -128,9 +136,13 @@
     {
         [self performSegueWithIdentifier:@"moveToSettings" sender:self];
     }
+    else if (![whatDidIget caseInsensitiveCompare:@"move to library"])
+    {
+        [self performSegueWithIdentifier:@"moveToLibrary" sender:self];
+    }
     else if (![whatDidIget caseInsensitiveCompare:@"calculate time delay"])
     {
-        [_sessionManager sendCalculateTimeDelayResponse];
+        [_sessionManager sendCalculateTimeDelayResponse:self];
     }
     else if (![whatDidIget caseInsensitiveCompare:@"calculate time delay response"])
     {
@@ -139,8 +151,8 @@
     {
     }
     else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unexpected message" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert show];
+        //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unexpected message" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		//[alert show];
     }
 }
 

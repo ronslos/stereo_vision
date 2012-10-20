@@ -12,6 +12,12 @@ static int TEN_K = 51200/8;
 
 @interface ReconstructionViewController ()
 
+@property (nonatomic) double waitPeriod;
+@property (nonatomic) double start;
+@property (nonatomic) double interval;
+@property (nonatomic) double rttTime;
+@property (nonatomic, strong) NSMutableArray * rtts;
+
 - (void) showCaptureOnScreen;
 - (NSMutableData*) dataFromImage:(cv::Mat*) image;
 - (void) imageFromData: (NSData *) data withSize:(cv::Size) size: (cv::Mat*) img; 
@@ -23,6 +29,11 @@ static int TEN_K = 51200/8;
 @implementation ReconstructionViewController
 
 @synthesize waitPeriod = _waitPeriod;
+@synthesize start = _start;
+@synthesize interval = _interval;
+@synthesize rttTime = _rttTime;
+@synthesize rtts = _rtts;
+
 @synthesize imageView = _imageView;
 @synthesize captureBtn = _captureBtn;
 @synthesize pictures = _pictures;
@@ -81,6 +92,14 @@ static int TEN_K = 51200/8;
     else {
         self.pictures = [[NSMutableArray alloc] init];
     }
+    
+    _rttCount = 0;
+    _rttGap = 0;
+    self.rtts = [NSMutableArray arrayWithCapacity:5];
+    
+    [NSThread sleepForTimeInterval:0.5];
+    self.start = CACurrentMediaTime();
+    [_sessionManager sendUpdateDelay:self];
     
     [self showCaptureOnScreen];
     
@@ -148,7 +167,7 @@ static int TEN_K = 51200/8;
         (*_videoCapture) >> _lastFrame;
         cv::Mat grayFrame;
         cv::cvtColor(_lastFrame, grayFrame, CV_RGB2GRAY);
-        
+        [self.captureBtn setEnabled:NO];
         // send captured image in packages
         
         NSData* data = [self dataFromImage:&grayFrame];
@@ -172,7 +191,6 @@ static int TEN_K = 51200/8;
         
         // end of image sending code
         
-        [self.captureBtn setEnabled:NO];
         dispatch_queue_t myQueue = dispatch_queue_create("my op thread", NULL);
         dispatch_async(myQueue, ^{
             
@@ -326,6 +344,37 @@ static int TEN_K = 51200/8;
     {
         [self.navigationController popViewControllerAnimated:YES];
     }
+    else if (![whatDidIget caseInsensitiveCompare:@"update delay"])
+    {
+        [_sessionManager sendUpdateDelayResponse:self];
+        
+        // patch in case the other device missed your first message
+        if (_rttCount == 0) {
+            _rttGap++;
+            if (_rttGap > 3){
+                [_sessionManager sendUpdateDelay: self];
+            }
+        }
+    }
+    else if (![whatDidIget caseInsensitiveCompare:@"update delay response"])
+    {
+        self.interval = CACurrentMediaTime();
+        self.rttTime = self.interval - self.start;
+        NSNumber * val = [NSNumber numberWithDouble:self.rttTime];
+        [self.rtts insertObject:val atIndex:_rttCount];
+        _rttCount++;
+        if (_rttCount == 5) {
+            // perform calculation of delay time
+            self.waitPeriod = [TimeDelayCalculation calculateUpdatedDelay:self.rtts withPrevDelay:self.waitPeriod];
+            // this value is calculated locally, therfore not synchronized back to NSUserDefaults
+        }
+        else {
+            // send another timestamp message
+            self.start = CACurrentMediaTime();
+            [_sessionManager sendUpdateDelay: self];
+        }
+    }
+    // received data
     else if (_chunksReceived == YES)
     {
         // handle the recieving of image data and rebuild image
@@ -361,26 +410,7 @@ static int TEN_K = 51200/8;
                 cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
                 [self saveImage:[UIImage imageWithCVMat:_lastFrame] withDepthMap:&_depthImg withDisparity:&gray1];
             }
-
-
-
             
-//            
-//            int i;
-//            for(i=0; i< _depthImg.rows; i++)
-//                for(int j=0; j<_depthImg.cols; j++)
-//                    std::cout << _depthImg.at<cv::Vec3f>(i,j)[0] << "," << _depthImg.at<cv::Vec3f>(i,j)[1] << "," << _depthImg.at<cv::Vec3f>(i,j)[2] << ","<<std::endl;
-//            std::cout <<" };" <<std::endl;
-//            std::cout <<"char colors[] ={"<< std::endl;
-//            cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
-//            for(i=0; i< gray2.rows; i++)
-//                for(int j=0; j<gray2.cols; j++)
-//                    std::cout << (int)_lastFrame.at<cv::Vec3b>(i,j)[0] <<"," <<(int)_lastFrame.at<cv::Vec3b>(i,j)[1] <<"," <<(int)_lastFrame.at<cv::Vec3b>(i,j)[2] <<","<< std::endl;
-            
-            //************ Omer **********
-            //UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NULL message:@"Would you like to save?" delegate:self cancelButtonTitle:@"Discard" otherButtonTitles:@"save", nil];
-            //[alert show];
-            //[alert release];
             [self displayLastImage];
         }
     }
@@ -393,15 +423,5 @@ static int TEN_K = 51200/8;
     [self capture];
 }
 
-//
-//#pragma mark -
-//#pragma mark UIAlertViewDelegate
-//
-//- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-//{
-//    if (buttonIndex==1)
-//        [self saveImage:[UIImage imageWithCVMat:_depthImg]];
-//}
-//
 
 @end
