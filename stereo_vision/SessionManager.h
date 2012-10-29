@@ -15,6 +15,7 @@
 #import <GameKit/GameKit.h>
 #import <QuartzCore/CAAnimation.h>
 #import "ResponseFromSession.h"
+#import "TimeDelayCalculation.h"
 
 @interface SessionManager : NSObject <GKSessionDelegate, GKPeerPickerControllerDelegate>
 {
@@ -36,12 +37,17 @@
 + (SessionManager *)instance;
 - (void) initializeSession;
 - (void) sendClick: (id) sender;
+- (void) sendDisableCapture: (id) sender;
+- (void) sendEnableCapture: (id) sender;
 - (void) sendMoveToCalibration: (id) sender;
 - (void) sendMoveToReconstruction: (id) sender;
-- (void) sendCalculateTimeDelay;
-- (void) sendCalculateTimeDelayResponse;
+- (void) sendCalculateTimeDelay: (id) sender;
+- (void) sendCalculateTimeDelayResponse: (id) sender;
+- (void) sendUpdateDelay: (id) sender;
+- (void) sendUpdateDelayResponse: (id) sender;
 - (void) sendMoveBackToMenu;
 - (void) sendMoveToSettings: (id) sender;
+- (void) sendMoveToLibrary: (id) sender;
 - (void) settingsUpdate: (NSString*) field withValue:(NSString*) value;
 
 @end

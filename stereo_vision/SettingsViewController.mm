@@ -50,23 +50,25 @@
 @synthesize F3_3;
 @synthesize LeftRightControl;
 
-
+/*
+ Method      : viewDidLoad
+ Parameters  : 
+ Returns     :
+ Description : This method gets called automatically when this view controller is loaded to the screen.
+ It is used to initialize all the objects required for the functionality of this view.
+ */
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    // setting the UIScrollview dimensions
-    //UIImage *image = [UIImage imageNamed:@"grey_img.jpeg"];
-    //UIImageView *iv = [[UIImageView alloc] initWithImage:image];
-    //[scrollView addSubview:iv];
-    //scrollView.contentSize = iv.bounds.size;
-    
+    // getting the handle for the session object
     _sessionManager = [SessionManager instance];
     if (_sessionManager.mySession != NULL)
     {
         [[_sessionManager mySession ] setDataReceiveHandler:self withContext:nil];
     }
     
+    // setting the functionality of the UITextField objects
     [self.squareHeight setReturnKeyType:UIReturnKeyDone];
     [self.squareWidth setReturnKeyType:UIReturnKeyDone];
     [self.boardWidth setReturnKeyType:UIReturnKeyDone];
@@ -76,6 +78,7 @@
     [self.boardHeight setDelegate:self];
     [self.boardWidth setDelegate:self];
     
+    // loading the stored values for the chessboard charicteristic 
     NSString* boardWidthString = (NSString*) [[NSUserDefaults standardUserDefaults] objectForKey:@"boardWidth"];
     NSString* boardHeightString = (NSString*) [[NSUserDefaults standardUserDefaults] objectForKey:@"boardHeight"];
     NSString* squareHeightString = (NSString*) [[NSUserDefaults standardUserDefaults] objectForKey:@"squareHeight"];
@@ -90,7 +93,7 @@
     
     [self.scrollView setContentSize:CGSizeMake(320, 700)];
     
-    // Upload from memory the settings that are stored
+    // loading the stored matrices that resulted from the last stereo calibration process
     NSMutableArray* RArray = (NSMutableArray*)[[NSUserDefaults standardUserDefaults] objectForKey:@"Rarray"];
     
     NSMutableArray* TArray = (NSMutableArray*)[[NSUserDefaults standardUserDefaults] objectForKey:@"Tarray"];
@@ -123,6 +126,14 @@
     
 }
 
+/*
+ Method      : viewDidUnload
+ Parameters  : 
+ Returns     :
+ Description : This method gets called automatically after this view controller is taken of the screen.
+               It is not called immediately, rather at an undetermined time.
+               It is used to release all the objects that were held by this viewcontroller.
+ */
 - (void)viewDidUnload
 {
     [self setScrollView:nil];
@@ -162,8 +173,6 @@
     [self setSquareHeight:nil];
     [self setLeftRightControl:nil];
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -171,10 +180,17 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
--(void) viewWillDisappear:(BOOL)animated {
+/*
+ Method      : viewWillDisappear
+ Parameters  : 
+ Returns     :
+ Description : This method gets called automatically just as this view controller is taken of the screen.
+               Used to perform tasks that must be done at the moment this view is being removed.
+ */
+-(void) viewWillDisappear:(BOOL)animated 
+{
     if ([self.navigationController.viewControllers indexOfObject:self]==NSNotFound) {
-        // back button was pressed.  We know this is true because self is no longer
-        // in the navigation stack.  
+        // if back button was pressed, notify other device to move back as well
         if (_sessionManager.mySession != NULL) {
             [_sessionManager sendMoveBackToMenu];
         }
@@ -183,12 +199,21 @@
 }
 
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (BOOL)textFieldShouldReturn:(UITextField *)textField 
+{
     [textField resignFirstResponder];
     return NO;
 }
 
-- (IBAction)saveWidth:(UITextField *)sender {
+/*
+ Method      : saveWidth
+ Parameters  : (UITextField *)sender
+ Returns     :
+ Description : Action that is activated when editing was finished in the board width field - number of internal corners horizontally.
+               Stores the new value, and if there's an active session also sends it to the other device.
+ */
+- (IBAction)saveWidth:(UITextField *)sender 
+{
     [[NSUserDefaults standardUserDefaults] setObject: sender.text forKey:@"boardWidth"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     if (_sessionManager.mySession != NULL) {
@@ -197,7 +222,15 @@
     }
 }
 
-- (IBAction)saveHeight:(UITextField *)sender {
+/*
+ Method      : saveHeight
+ Parameters  : (UITextField *)sender
+ Returns     :
+ Description : Action that is activated when editing was finished in the board height field - number of internal corners vertically.
+               Stores the new value, and if there's an active session also sends it to the other device.
+ */
+- (IBAction)saveHeight:(UITextField *)sender 
+{
     [[NSUserDefaults standardUserDefaults] setObject: sender.text forKey:@"boardHeight"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     if (_sessionManager.mySession != NULL) {
@@ -206,7 +239,15 @@
     }
 }
 
-- (IBAction)saveSquareHeight:(UITextField *)sender {
+/*
+ Method      : saveSquareHeight
+ Parameters  : (UITextField *)sender
+ Returns     :
+ Description : Action that is activated when editing was finished in the board square height field.
+               Stores the new value, and if there's an active session also sends it to the other device.
+ */
+- (IBAction)saveSquareHeight:(UITextField *)sender 
+{
     [[NSUserDefaults standardUserDefaults] setObject: sender.text forKey:@"squareHeight"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     if (_sessionManager.mySession != NULL) {
@@ -216,7 +257,15 @@
 
 }
 
-- (IBAction)saveSquareWidth:(UITextField *)sender {
+/*
+ Method      : saveSquareWidth
+ Parameters  : (UITextField *)sender
+ Returns     :
+ Description : Action that is activated when editing was finished in the board square width field.
+               Stores the new value, and if there's an active session also sends it to the other device.
+ */
+- (IBAction)saveSquareWidth:(UITextField *)sender 
+{
     [[NSUserDefaults standardUserDefaults] setObject: sender.text forKey:@"squareWidth"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     if (_sessionManager.mySession != NULL) {
@@ -226,18 +275,27 @@
 
 }
 
-- (IBAction)LeftRightControlChanged:(UISegmentedControl*)sender {
+/*
+ Method      : LeftRightControlChanged
+ Parameters  : (UISegmentedControl*)sender
+ Returns     :
+ Description : Action that is activated when the state of the control button was changed.
+               Stores the new relative location - left or right, and if there's an active session also sends 
+               the opposite location to the other device.
+ */
+- (IBAction)LeftRightControlChanged:(UISegmentedControl*)sender 
+{
     if ([sender selectedSegmentIndex]==0) {
         [[NSUserDefaults standardUserDefaults] setObject: [NSString stringWithFormat:@"Left"] forKey:@"side"];
         if (_sessionManager.mySession != NULL) {
-            // send new square width data to other device
+            // send new relative location data to other device
             [_sessionManager settingsUpdate:@"side:" withValue:[NSString stringWithFormat:@"Right"]];
         }
     }
     else if ([sender selectedSegmentIndex]==1) {
         [[NSUserDefaults standardUserDefaults] setObject: [NSString stringWithFormat:@"Right"] forKey:@"side"];
         if (_sessionManager.mySession != NULL) {
-            // send new square width data to other device
+            // send new relative location data to other device
             [_sessionManager settingsUpdate:@"side:" withValue:[NSString stringWithFormat:@"Left"]];
         }
     }
@@ -247,49 +305,59 @@
 #pragma mark -
 #pragma mark GKPeerPickerControllerDelegate
 
+/*
+ Method      : receiveData
+ Parameters  : (NSData *)data - the data received in the message
+               (NSString *)peer  - the peer sending us this data
+               (GKSession *)session - the session this peer belongs to
+ Returns     :
+ Description : This function gets called when a message is being received from the other device, and this view controller
+               is set as the data receive handler.
+ */
 - (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context
 {   
     NSString *whatDidIget = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
     if (![whatDidIget caseInsensitiveCompare:@"move to menu"])
     {
+        // need to move back to main menu
         [self.navigationController popViewControllerAnimated:YES];
     }
     else if ([whatDidIget hasPrefix:@"boardWidth:"])
     {
+        // update board width value
         NSString* value = [whatDidIget substringFromIndex:11];
-        NSLog(@"value is %d", [value integerValue]); // debug
         [[NSUserDefaults standardUserDefaults] setObject: value forKey:@"boardWidth"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self.boardWidth setText:value]; 
     }
     else if ([whatDidIget hasPrefix:@"boardHeight:"])
     {
+        // update board height value
         NSString* value = [whatDidIget substringFromIndex:12];
-        NSLog(@"value is %d", [value intValue]); // debug
         [[NSUserDefaults standardUserDefaults] setObject: value forKey:@"boardHeight"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self.boardHeight setText:value]; 
     }
     else if ([whatDidIget hasPrefix:@"squareHeight:"])
     {
+        // update square height value
         NSString* value = [whatDidIget substringFromIndex:13];
-        NSLog(@"value is %d", [value integerValue]); // debug
         [[NSUserDefaults standardUserDefaults] setObject: value forKey:@"squareHeight"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self.squareHeight setText:value]; 
     }
     else if ([whatDidIget hasPrefix:@"squareWidth:"])
     {
+        // update square width value
         NSString* value = [whatDidIget substringFromIndex:12];
-        NSLog(@"value is %d", [value integerValue]); // debug
         [[NSUserDefaults standardUserDefaults] setObject: value forKey:@"squareWidth"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self.squareWidth setText:value]; 
     }
     else if ([whatDidIget hasPrefix:@"side:"])
     {
+        // update the relative position of the device
         NSString* value = [whatDidIget substringFromIndex:5];
-        NSLog(@"value is %d", [value integerValue]); // debug
         [[NSUserDefaults standardUserDefaults] setObject: value forKey:@"side"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         if ([value hasPrefix:@"Left"]){

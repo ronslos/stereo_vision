@@ -15,7 +15,7 @@
 #ifndef uiimage_h_
 #define uiimage_h_
 
-#import "File.h"
+#import "OpenCVCalculations.h"
 #import <UIKit/UIKit.h>
 
 @interface UIImage (UIImage_OpenCV)

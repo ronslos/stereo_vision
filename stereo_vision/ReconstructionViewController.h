@@ -9,13 +9,14 @@
 #ifndef reconstructionviewcontroller_h_
 #define reconstructionviewcontroller_h_
 
-#include "File.h"
+#include "OpenCVCalculations.h"
 #import "SessionManager.h"
+#import "TimeDelayCalculation.h"
+#import <QuartzCore/CAAnimation.h>
 #import <AVFoundation/AVCaptureDevice.h>
 #import <UIKit/UIKit.h>
 
 @interface ReconstructionViewController : UIViewController <GKPeerPickerControllerDelegate>
-
 {
     cv::VideoCapture *_videoCapture;
     cv::Size _imageSize;
@@ -32,9 +33,11 @@
     SessionManager* _sessionManager;
     cv::Mat _map11, _map12, _map21 ,_map22 ,_Q;
     cv::Rect _roi1 , _roi2;
+    
+    int _rttCount;
+    int _rttGap;
 }
 
-@property (nonatomic) double waitPeriod;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIButton *captureBtn;
 @property (strong, nonatomic) NSMutableArray* pictures;

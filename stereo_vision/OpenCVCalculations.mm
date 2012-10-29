@@ -1,12 +1,12 @@
 //
-//  File.c
+//  OpenCVCalculations.mm
 //  OpenCVClient
 //
 //  Created by Ron Slossberg on 4/24/12.
 //  Copyright (c) 2012 Aptogo Limited. All rights reserved.
 //
 
-#import "File.h"
+#import "OpenCVCalculations.h"
 
 using namespace std;
 using namespace cv;
@@ -149,12 +149,12 @@ void createMap(const cv::Size imgSize, cv::Mat &Q , cv::Mat &map11 , cv::Mat &ma
     R = Mat::zeros(3, 3, CV_64F);
     T = Mat::zeros(1, 3, CV_64F);
     
-    cameraMatrix[0] = *[manageCVMat loadCVMat:cv::Size(3,3) WithKey:@"K0array"];
-    cameraMatrix[1] = *[manageCVMat loadCVMat:cv::Size(3,3) WithKey:@"K1array"];
-    distCoeffs[0] = *[manageCVMat loadCVMat:cv::Size(1,5) WithKey:@"D0array"];
-    distCoeffs[1] = *[manageCVMat loadCVMat:cv::Size(1,5) WithKey:@"D1array"];
-    R = *[manageCVMat loadCVMat:cv::Size(3,3) WithKey:@"Rarray"];
-    T = *[manageCVMat loadCVMat:cv::Size(1,3) WithKey:@"Tarray"];
+    cameraMatrix[0] = [manageCVMat loadCVMat:cv::Size(3,3) WithKey:@"K0array"];
+    cameraMatrix[1] = [manageCVMat loadCVMat:cv::Size(3,3) WithKey:@"K1array"];
+    distCoeffs[0] = [manageCVMat loadCVMat:cv::Size(1,5) WithKey:@"D0array"];
+    distCoeffs[1] = [manageCVMat loadCVMat:cv::Size(1,5) WithKey:@"D1array"];
+    R = [manageCVMat loadCVMat:cv::Size(3,3) WithKey:@"Rarray"];
+    T = [manageCVMat loadCVMat:cv::Size(1,3) WithKey:@"Tarray"];
     
     cv::Size img_size = imgSize;
     
@@ -271,12 +271,12 @@ int SADWindowSize = 0, numberOfDisparities = 0;
             //Get 3D coordinates
             uchar d = disp_ptr[j];
             //std::cout << int(d) << std::endl;
-            if ( d == 0 )
-            {
-                px = static_cast<double>(j) + Q03;
-                py = static_cast<double>(i) + Q13;
-                pz =0;
-            }
+            //if ( d == 0 )
+            //{
+            //    px = static_cast<double>(j) + Q03;
+            //    py = static_cast<double>(i) + Q13;
+            //    pz =0;
+            //}
             double pw = -1.0 * static_cast<double>(d) * Q32 + Q33;
             px = static_cast<double>(j) + Q03;
             py = static_cast<double>(i) + Q13;

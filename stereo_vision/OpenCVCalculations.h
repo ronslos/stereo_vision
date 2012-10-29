@@ -1,5 +1,5 @@
 //
-//  Header.h
+//  OpenCVCalculations.h
 //  OpenCVClient
 //
 //  Created by Ron Slossberg on 4/24/12.

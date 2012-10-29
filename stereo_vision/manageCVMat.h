@@ -10,12 +10,12 @@
 #define manageCVmat_h_
 
 #import <Foundation/Foundation.h>
-#import "File.h"
+#import "OpenCVCalculations.h"
 
 @interface manageCVMat : NSObject
 
 + (void) storeCVMat: (cv::Mat) mat withKey: (NSString*) key;
-+ (cv::Mat*) loadCVMat: (cv::Size) size  WithKey: (NSString*) key;
++ (cv::Mat) loadCVMat: (cv::Size) size  WithKey: (NSString*) key;
 
 @end
 
