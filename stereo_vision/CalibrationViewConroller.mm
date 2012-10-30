@@ -138,7 +138,7 @@
  Method      : showCaptureOnScreen
  Parameters  : 
  Returns     :
- Description : 
+ Description : this function grabs frames from the videCapture and displays them on screen in a loop using an asynchronus thread 
  */
 -(void)showCaptureOnScreen
 {
@@ -219,6 +219,8 @@
     
     if( _imageCount != _otherImageCount)
     {
+        // if both devices have different image counts (if one device fails to discover corners for instance) the state is reinitialized and calibration process is started from beginning
+        // none of the calibration methods are called in this case
         _imageCount = 0;
         _otherImageCount = 0;
         return;
@@ -227,20 +229,27 @@
     
     _calibrating = YES;
     dispatch_queue_t myQueue = dispatch_queue_create("my calibration thread", NULL);
+    // show activity indicator while calibrating
     [self.activityIndicator startAnimating];
     
     [self.captureBtn setEnabled:NO];
     [self.calibrationButton setEnabled:NO];
+    // disable capture button on paired device
     [_sessionManager sendDisableCapture:self];
+    // preform calibration in asynchronus thread so UI doesn't freeze
     dispatch_async(myQueue, ^{
+        // resize the object points according to the number of images captured
         _objectPoints.resize(_imageCount);
+        // preform calibration ( all parameters are stored in memory )
         double rms =  calibrateCameras( _boardSize,_imagePoints, _objectPoints, _imageCount , _imageSize, _squareHeight, _squareWidth);
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self.activityIndicator stopAnimating];
+            // show message on screen when calibration complete
             NSString* message = [NSString stringWithFormat:@"Calibration Completed with rms %f" ,rms];
             UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Calibration" message: message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
             [alert show];
 
+            // enable capture and calibration buttons on both devices when calibration completed
             [self.captureBtn setEnabled:YES];
             [self.calibrationButton setEnabled:YES];
             _calibrating = NO;
@@ -255,7 +264,8 @@
  Method      : capture
  Parameters  :
  Returns     :
- Description : 
+ Description : this method captures a single frame (called when capture button is pressed) and calls the findCorners method
+               when corners our found they are displayed in the imageView
  */
 -(void) capture
 {
@@ -263,11 +273,13 @@
     { 
 
         _notCapturing = NO;
+        // grab frame
         (*_videoCapture) >> _lastFrame;
         cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
         // [self.captureBtn setEnabled:NO];
         dispatch_queue_t myQueue = dispatch_queue_create("my op thread", NULL);
         dispatch_async(myQueue, ^{
+            // find corners for captured frame
             UIImage* corners = [self findCorners];
             dispatch_sync(dispatch_get_main_queue(), ^{
                 
@@ -279,9 +291,11 @@
                     [self.calibrationButton setEnabled:YES];
                 }
                 
+                // set the imageView image property to the corners image for display
                 self.imageView.image = corners;
             });
             _notCapturing = YES;
+            // return to capture loop
             [self showCaptureOnScreen];
         });
         dispatch_release(myQueue);
@@ -307,11 +321,14 @@
 
     if(StereoCalib(grayFrame ,_boardSize,_imagePoints,_imageCount, cornersImg))
     {
+        // create NSData object from chessboard points in preparation to send
         NSData* data = [self dataFromVector: &_imagePoints[0][_imageCount]];
+        // send the chessboard points found to paired device
         [_sessionManager sendDataToPeers:NULL WithData:data];
+        // increase image count
         _imageCount++;
-        // NSLog(@"own image count is %d",_imageCount); // debug
     }
+    // return uiimage to display corners
     UIImage * corners = ([UIImage imageWithCVMat:cornersImg]);
     
     return  corners;
@@ -342,7 +359,7 @@
  Method      : dataFromVector
  Parameters  : (cv::vector<cv::Point2f>*) vector - the vector of the corners locations
  Returns     :
- Description :
+ Description : this method creates NSData object from a cv::Vector<cv::Point2f> object in preparation to send data to paired device
  */
 -(NSData*) dataFromVector:(cv::vector<cv::Point2f>*) vector
 {
@@ -361,10 +378,10 @@
 
 /*
  Method      : fillVectorFromData
- Parameters  : (NSData *) data - 
-               (cv::vector<cv::Point2f>*) vector - 
+ Parameters  : (NSData *) data - data to be reorgenized in vector
+               (cv::vector<cv::Point2f>*) vector - points vector to be filled with data
  Returns     :
- Description :
+ Description : this function recovers the vector from the data after it is received from paired device
  */
 -(void) fillVectorFromData: (NSData *) data :(cv::vector<cv::Point2f>*) vector
 {

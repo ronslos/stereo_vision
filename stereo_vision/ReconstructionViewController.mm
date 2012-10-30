@@ -107,7 +107,7 @@ static int TEN_K = 51200/8;
         self.pictures = [[NSMutableArray alloc] init];
     }
     
-    // starting new calculation of the wait period - if results are highky different from pre-calculated value, new value will be used
+    // starting new calculation of the wait period - if results are highly different from pre-calculated value, new value will be used
     _rttCount = 0;
     _rttGap = 0;
     self.rtts = [NSMutableArray arrayWithCapacity:5];
@@ -124,7 +124,8 @@ static int TEN_K = 51200/8;
  Method      : showCaptureOnScreen
  Parameters  : 
  Returns     :
- Description : 
+ Description : this method is used to capture frames in a loop and show the result on the screen
+               to make the application responsive we make the capture loop run in an asynchoronus queue (seperate thread)
  */
 -(void) showCaptureOnScreen
 {
@@ -198,7 +199,9 @@ static int TEN_K = 51200/8;
  Method      : capture
  Parameters  :
  Returns     :
- Description : 
+ Description : this procedure is called when capture button is pressed
+               first the frame is stored and converted to gray scale
+               then the grayscale image is sent in packets over the session to the other phone
  */
 - (void) capture
 {
@@ -211,10 +214,13 @@ static int TEN_K = 51200/8;
         
         // send captured image in packages
         NSData* data = [self dataFromImage:&grayFrame];
+        // calculate number of chunks from data size
         NSUInteger chunkCount = (NSUInteger)(data.length / TEN_K) + (data.length % TEN_K== 0 ? 0:1) ;
+        // send string with chunk size to other phone
         NSString *chunkCountStr = [NSString stringWithFormat:@"%d",chunkCount];
         NSData* chunkCountData = [chunkCountStr dataUsingEncoding: NSASCIIStringEncoding];
         [_sessionManager sendDataToPeers:NULL WithData:chunkCountData];
+        // split image data to chunks
         NSData *dataToSend;
         NSRange range = NSMakeRange(0, 0);
         for(NSUInteger i=0;i<data.length;i+=TEN_K){
@@ -222,6 +228,7 @@ static int TEN_K = 51200/8;
             dataToSend = [data subdataWithRange:range];
             [_sessionManager sendDataToPeers:NULL WithData:dataToSend];
         }
+        // special case of last chunk
         NSUInteger remainder = (data.length % TEN_K);
         if (remainder != 0){
             range = NSMakeRange(data.length - remainder,remainder);
@@ -252,7 +259,8 @@ static int TEN_K = 51200/8;
  Parameters  : (cv::Mat*) depthImage - 
                (cv::Mat*) colorImage - 
  Returns     :
- Description : 
+ Description : this function creates an NSData object from the point cloud data
+               the NSData is built where every six consecutive floating point numbers belong to one point in the cloud and contain the 3d coordinate and color
  */
 - (NSData*) dataFromDepthImage:(cv::Mat*) depthImage andColorImage: (cv::Mat*) colorImage
 {
@@ -269,16 +277,21 @@ static int TEN_K = 51200/8;
         {
             pix = colorImage->at<cv::Vec4b>(i,j);
             pos = depthImage->at<cv::Vec3f>(i,j);
+            // x coordinate
             [data appendBytes:(void*)(&pos[0]) length:sizeof(float)];
+            // y coordinate
             [data appendBytes:(void*)(&pos[1]) length:sizeof(float)];
+            // z coordinate
             [data appendBytes:(void*)(&pos[2]) length:sizeof(float)];
+            // r value
             val = (float)pix[0]/255;
             [data appendBytes:(void*)(&val) length:sizeof(float)];
+            // g value
             val = (float)pix[1]/255;
             [data appendBytes:(void*)(&val) length:sizeof(float)];
+            // b value
             val = (float) pix[2]/255;
             [data appendBytes:(void*)(&val) length:sizeof(float)];
-//            [data appendBytes:(void*)(&one) length:sizeof(float)];
         }
     }
     return data;
@@ -286,9 +299,9 @@ static int TEN_K = 51200/8;
 
 /*
  Method      : dataFromImage
- Parameters  : (cv::Mat*) image - 
+ Parameters  : (cv::Mat*) image - image to turn into NSData object
  Returns     :
- Description : 
+ Description : create NSData object from an image to send or store 
  */
 - (NSMutableData*) dataFromImage:(cv::Mat*) image
 {
@@ -309,11 +322,11 @@ static int TEN_K = 51200/8;
 
 /*
  Method      : imageFromData
- Parameters  : (NSData *) data - 
-               (cv::Size) size - 
-               (cv::Mat*) img - 
+ Parameters  : (NSData *) data - image data which needs to be transformed into cv::Mat
+               (cv::Size) size - image size
+               (cv::Mat*) img - output Mat for image built from data
  Returns     :
- Description : 
+ Description : this function reassembles an image into a cv::Mat from a NSData object
  */
 - (void) imageFromData: (NSData *) data withSize:(cv::Size) size: (cv::Mat*) img 
 {
@@ -336,24 +349,29 @@ static int TEN_K = 51200/8;
 
 /*
  Method      : saveImage
- Parameters  : (UIImage *)image - 
-               (cv::Mat*) depthMap - 
-               (cv::Mat*) disparity -
+ Parameters  : (UIImage *)image - color image to save
+               (cv::Mat*) depthMap - depth map to save
+               (cv::Mat*) disparity - disparity map to save
  Returns     :
- Description : 
+ Description : this function saves all the data from the reconstruction method in order to view it at a later time
  */
 - (void) saveImage:(UIImage *)image withDepthMap: (cv::Mat*) depthMap withDisparity: (cv::Mat*) disparity
 {
+    // image will be saved to the documents directory
     NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    // get image number for use in file name
     NSInteger imgNum = [[NSUserDefaults standardUserDefaults]integerForKey:@"imageNum" ];
+    // write disparity image to file
     [UIImageJPEGRepresentation([UIImage imageWithCVMat:*disparity], 1.0) writeToFile:[documentsDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"IMG_%d.%@", imgNum, @"jpg"]] options:NSAtomicWrite error:nil];
     NSString * picPath = [documentsDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"IMG_%d.%@", imgNum, @"jpg"]];
-    NSLog(@"url is %@" , picPath);
+//    NSLog(@"url is %@" , picPath);
     
     // create and save deapth data
     cv::Mat imageMat = [image CVMat];
+    // combine color image and point cloud into data object for storing
     NSData* data = [NSData dataWithData:[self dataFromDepthImage:depthMap andColorImage: &imageMat ]];
     NSString * depthPath = [documentsDirectoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"DEPTH_IMG_%d", imgNum]];
+    // store point cloud data
     [NSKeyedArchiver archiveRootObject:data toFile:depthPath];
     
     // create the date
@@ -366,6 +384,7 @@ static int TEN_K = 51200/8;
     NSDictionary* pic = [[NSDictionary alloc] initWithObjectsAndKeys: [NSString stringWithFormat:@"IMG_%d", imgNum], @"name", dateString, @"date", picPath, @"url",depthPath , @"depth_url", nil];
     [self.pictures addObject:pic];
     NSArray * savedArray = [[NSArray alloc] initWithArray:self.pictures];
+    // save the updated pictures array and picture counter
     [[NSUserDefaults standardUserDefaults] setObject:savedArray forKey:@"pictures"];
     imgNum++;
     [[NSUserDefaults standardUserDefaults] setInteger:imgNum forKey:@"imageNum"];
@@ -377,7 +396,7 @@ static int TEN_K = 51200/8;
  Method      : loadImage
  Parameters  :  
  Returns     :
- Description : 
+ Description : loads the last saved disparity image from memory for display
  */
 - (UIImage *) loadImage {
     NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -392,7 +411,7 @@ static int TEN_K = 51200/8;
  Method      : displayLastImage
  Parameters  :  
  Returns     :
- Description : 
+ Description : displays the disparity image momentarily before resuming capture loop
  */
 - (void) displayLastImage
 {
@@ -480,17 +499,21 @@ static int TEN_K = 51200/8;
         NSLog(@"%d" , _chunkCount);
         if(_chunkCount == _totalChunks)
         {
+            // after entire image received from paired device, reconstruction can start
             _chunksReceived = YES ;
             _chunkCount = 0;
+            // extract image from received data
             [self imageFromData:_imgData withSize:_imageSize :&_secondImg];
             cv::Mat gray1,gray2;
             cv::cvtColor(_lastFrame, gray1, CV_RGB2GRAY);
             cv::cvtColor(_secondImg, gray2, CV_RGB2GRAY);
             _notCapturing = YES;
+            // acoording to camera identity (left / right) preform reconstruction of 3d point cloud from images
             if (_isLeftCamera){
                 reconstruct(_imageSize, &gray1, &gray2, &_depthImg, _map11, _map12, _map21, _map22, _roi1, _roi2 ,_Q, self.pickAlg.selectedSegmentIndex);
                 self.imageView.image = [UIImage imageWithCVMat:gray2];
                 cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
+                // save disparity for presentation
                 [self saveImage:[UIImage imageWithCVMat:_lastFrame] withDepthMap:&_depthImg withDisparity:&gray2];
             }
             else
@@ -498,6 +521,7 @@ static int TEN_K = 51200/8;
                 reconstruct(_imageSize, &gray2, &gray1, &_depthImg, _map21, _map22, _map11, _map12, _roi2, _roi1 ,_Q, self.pickAlg.selectedSegmentIndex);
                 self.imageView.image = [UIImage imageWithCVMat:gray1];
                 cv::cvtColor(_lastFrame, _lastFrame, CV_BGR2RGB);
+                // save disparity for presentation
                 [self saveImage:[UIImage imageWithCVMat:_lastFrame] withDepthMap:&_depthImg withDisparity:&gray1];
             }
             

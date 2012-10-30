@@ -17,11 +17,15 @@
 
 @interface Isgl3dViewController : UIViewController <GKPeerPickerControllerDelegate>
 {
+    // depth view controller instance
     DepthView* _depthView;
+    // instance of session manager
     SessionManager* _sessionManager;
 }
 
+// vertex data
 @property (nonatomic) Vertex *vertices;
+// size of vertex data
 @property (nonatomic) int vertexNumber;
 
 @end

@@ -18,8 +18,11 @@
 #import "OpenCVCalculations.h"
 #import <UIKit/UIKit.h>
 
+
+// uiimage catagory for openCV
 @interface UIImage (UIImage_OpenCV)
 
+// create UIImage from cvMat
 + (UIImage *)imageWithCVMat:(const cv::Mat&)cvMat;
 - (id)initWithCVMat:(const cv::Mat&)cvMat;
 

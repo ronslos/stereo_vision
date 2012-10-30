@@ -12,7 +12,7 @@
 @implementation Isgl3dViewController
 
 @synthesize vertices = _vertices;
-@synthesize vertexNumber = _vertexNumber;
+//@synthesize vertexNumber = _vertexNumber;
 
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -91,7 +91,7 @@
     }
     
 	// Instantiate the Isgl3dDirector and set background color
-	[Isgl3dDirector sharedInstance].backgroundColorString = @"333333ff";
+	[Isgl3dDirector sharedInstance].backgroundColorString = @"000000";
     
 	// Set the device orientation
 	[Isgl3dDirector sharedInstance].deviceOrientation = Isgl3dOrientationLandscapeLeft;
@@ -132,6 +132,7 @@
 	// Creates the view(s) and adds them to the director
     _depthView = [DepthView view];
     [_depthView setVertices:_vertices];
+    [_depthView setVertexNumber:_vertexNumber];
     [_depthView createScene];
 	[[Isgl3dDirector sharedInstance] addView:_depthView];
 	// Run the director
@@ -153,7 +154,10 @@
     //[[Isgl3dDirector sharedInstance] pause];
     [self setVertices:nil];
     
+    // reset the isgl3dDirector instance
     [Isgl3dDirector resetInstance];
+    
+    // because of ARC compatability we must destroy scene manually
     [_depthView destroyScene];
     //_depthView = nil;
 

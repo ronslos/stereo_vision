@@ -155,8 +155,10 @@
 
     if ([segue.identifier isEqualToString:@"moveToImage"]) 
     {
+        // send vertex data and number of vertices to destination view controller
         [segue.destinationViewController setVertices: vertices];
-        [segue.destinationViewController setVertexNumber:[data length]/(7*sizeof(float))];
+        int vertexNum = [data length]/ (3*sizeof(double));
+        [segue.destinationViewController setVertexNumber:vertexNum];
 
     }
 }
