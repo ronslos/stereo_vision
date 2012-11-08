@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11G63" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="dky-Gc-Wab">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2844" systemVersion="12C60" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="dky-Gc-Wab">
     <dependencies>
-        <deployment defaultVersion="1296" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1181"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1930"/>
     </dependencies>
     <scenes>
         <!--View Controller - Main Menu-->
         <scene sceneID="5">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
                 <viewController title="Main Menu" id="2" customClass="ViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
@@ -107,13 +105,13 @@
                         <segue destination="gk9-AZ-CGC" kind="push" identifier="moveToLibrary" id="ULv-Wh-G0j"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="997" y="-167"/>
         </scene>
         <!--Reconstruction View Controller - Reconstruction-->
         <scene sceneID="rUW-8V-7PY">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="L8B-W1-8A9" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController title="Reconstruction" id="RhT-IB-rJm" customClass="ReconstructionViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="SnB-rY-3w4">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
@@ -156,13 +154,13 @@
                         <outlet property="pickAlg" destination="lbb-Yn-4in" id="wXe-4D-1i2"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="L8B-W1-8A9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1437" y="441"/>
         </scene>
         <!--Library View Controller - 3D Photo Album-->
         <scene sceneID="07q-Yd-lIb">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Sro-qt-zIT" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="gk9-AZ-CGC" customClass="LibraryViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="98" sectionHeaderHeight="22" sectionFooterHeight="22" id="8kn-wu-zeK">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
@@ -207,28 +205,28 @@
                         <barButtonItem key="backBarButtonItem" title="3D Photo Album" id="4O1-su-Ayj"/>
                     </navigationItem>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Sro-qt-zIT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1437" y="-805"/>
         </scene>
-        <!--Isgl 3d View Controller - Image View-->
+        <!--Gl View Controller - Image View-->
         <scene sceneID="BfV-1L-Iaf">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="NhJ-qq-wUh" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController title="Image View" id="nQk-Oo-2BY" customClass="Isgl3dViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="zzD-mC-li6">
+                <viewController title="Image View" id="nQk-Oo-2BY" customClass="glViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="zzD-mC-li6" customClass="GLKView">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Selected Image" id="r8K-bg-ziL"/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NhJ-qq-wUh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1921" y="-1031"/>
         </scene>
         <!--Settings View Controller - Settings-->
         <scene sceneID="rz8-ZB-xt1">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="T65-Rb-cgV" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController title="Settings" id="USo-R2-8XB" customClass="SettingsViewController" sceneMemberID="viewController">
                     <scrollView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Lzv-yG-TQo">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
@@ -650,13 +648,13 @@
                         <outlet property="squareWidth" destination="aty-3P-GXX" id="ciE-gB-KB0"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="T65-Rb-cgV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1912" y="-422"/>
         </scene>
         <!--Calibration View Controller - Calibration-->
         <scene sceneID="ih9-95-yRI">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="enI-b6-yqc" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController title="Calibration" id="DMn-qd-0fy" customClass="CalibrationViewController" sceneMemberID="viewController">
                     <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="CA6-jM-TSR">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
@@ -721,13 +719,13 @@
                         <outlet property="imageView" destination="uHB-8Z-ctP" id="XeP-iz-9Il"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="enI-b6-yqc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1912" y="205"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="UD5-Ag-5S0">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Q8b-XL-7My" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="dky-Gc-Wab" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="ay4-iC-RzE">
@@ -743,6 +741,7 @@
                         <segue destination="2" kind="relationship" relationship="rootViewController" id="pgY-IW-NLG"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Q8b-XL-7My" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="419" y="-167"/>
         </scene>
@@ -760,14 +759,10 @@
                 <relationship kind="action" name="Calibrate:" candidateClass="UIButton"/>
                 <relationship kind="action" name="capturePressed:" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="calibLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="calibrationButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="captureBtn" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
             </relationships>
-        </class>
-        <class className="Isgl3dViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/Isgl3dViewController.h"/>
         </class>
         <class className="LibraryViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/LibraryViewController.h"/>
@@ -835,6 +830,9 @@
                 <relationship kind="action" name="photoLibraryPressed"/>
                 <relationship kind="action" name="reconstructPressed"/>
             </relationships>
+        </class>
+        <class className="glViewController" superclassName="GLKViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/glViewController.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

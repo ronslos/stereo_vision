@@ -307,6 +307,7 @@ int SADWindowSize = 0, numberOfDisparities = 0;
     Q32 = Q.at<double>(3,2);
     Q33 = Q.at<double>(3,3);
     disp.convertTo(disp8, CV_8U, 255/(numberOfDisparities*16.));
+    cv::medianBlur(disp8, disp8, 15);
 
     
     double px, py, pz;
@@ -324,7 +325,9 @@ int SADWindowSize = 0, numberOfDisparities = 0;
             px = static_cast<double>(j) + Q03;
             py = static_cast<double>(i) + Q13;
             pz = Q23;
-            
+            if (pw ==0) {
+                pw = -255.0 * Q32 + Q33;;
+            }
             if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"side"] hasPrefix:@"Left"] ){
                 px = px/pw;
                 py = py/pw;
@@ -335,7 +338,6 @@ int SADWindowSize = 0, numberOfDisparities = 0;
                 py = -py/pw;
                 pz = -pz/pw;
             }
-        
             xyz.at<Vec3f>(i,j)[0] = px;
             xyz.at<Vec3f>(i,j)[1] = py;
             xyz.at<Vec3f>(i,j)[2] = pz;

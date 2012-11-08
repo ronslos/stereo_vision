@@ -157,7 +157,7 @@
     {
         // send vertex data and number of vertices to destination view controller
         [segue.destinationViewController setVertices: vertices];
-        int vertexNum = [data length]/ (3*sizeof(double));
+        int vertexNum = [data length]/ (7*sizeof(float));
         [segue.destinationViewController setVertexNumber:vertexNum];
 
     }

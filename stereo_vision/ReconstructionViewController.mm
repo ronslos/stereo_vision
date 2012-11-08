@@ -292,6 +292,9 @@ static int TEN_K = 51200/8;
             // b value
             val = (float) pix[2]/255;
             [data appendBytes:(void*)(&val) length:sizeof(float)];
+            // alpha val
+            val = 1.f;
+            [data appendBytes:(void*)(&val) length:sizeof(float)];
         }
     }
     return data;
