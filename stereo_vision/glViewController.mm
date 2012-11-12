@@ -179,6 +179,7 @@
     _slerpMax = 1.0;
     _slerpStart = _quat;
     _slerpEnd = GLKQuaternionMake(0, 0, 0, 1);
+    _touchCount-=1;
     
 }
 
@@ -309,6 +310,7 @@
     // called when touche begin
     // update number of touches active
     _touchCount += [touches count];
+        NSLog(@"%d",_touchCount);
     if ([touches count] == 1){
         // update anchor position and current position when touches begin
         UITouch * touch = [touches anyObject];
@@ -328,7 +330,7 @@
     NSEnumerator * enumerator = [touches objectEnumerator];
     // get reference to touches
     
-    UITouch * touch = [touches anyObject];
+    UITouch * touch = [enumerator nextObject];
     // get current and last location from touches and calculate diff
     CGPoint location = [touch locationInView:self.view];
     CGPoint lastLoc = [touch previousLocationInView:self.view];
@@ -346,6 +348,7 @@
         
         float changeInDistance = currentDistance - previousDistance;
         _zoom+= changeInDistance;
+        NSLog(@"%f",_zoom);
     }
     else if (_touchCount==1) {
         // if single touch calculate rotation
@@ -368,6 +371,7 @@
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
     _touchCount -= [touches count];
+    NSLog(@"%d",_touchCount);
     
 }
 - (float) distanceBetweenPoint1:(CGPoint)point1 andPoint2:(CGPoint)point2 {
