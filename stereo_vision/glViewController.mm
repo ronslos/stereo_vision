@@ -7,70 +7,16 @@
 //
 
 #import "glViewController.h"
-//#include "vertices.h"
 #include <iostream>
 
 
-//const Vertex Vertices[] = {
-//    // Front
-//    {{1, -1, 1}, {1, 0, 0, 1}},
-//    {{1, 1, 1}, {0, 1, 0, 1}},
-//    {{-1, 1, 1}, {0, 0, 1, 1}},
-//    {{-1, -1, 1}, {0, 0, 0, 1}},
-//    // Back
-//    {{1, 1, -1}, {1, 0, 0, 1}},
-//    {{-1, -1, -1}, {0, 1, 0, 1}},
-//    {{1, -1, -1}, {0, 0, 1, 1}},
-//    {{-1, 1, -1}, {0, 0, 0, 1}},
-//    // Left
-//    {{-1, -1, 1}, {1, 0, 0, 1}},
-//    {{-1, 1, 1}, {0, 1, 0, 1}},
-//    {{-1, 1, -1}, {0, 0, 1, 1}},
-//    {{-1, -1, -1}, {0, 0, 0, 1}},
-//    // Right
-//    {{1, -1, -1}, {1, 0, 0, 1}},
-//    {{1, 1, -1}, {0, 1, 0, 1}},
-//    {{1, 1, 1}, {0, 0, 1, 1}},
-//    {{1, -1, 1}, {0, 0, 0, 1}},
-//    // Top
-//    {{1, 1, 1}, {1, 0, 0, 1}},
-//    {{1, 1, -1}, {0, 1, 0, 1}},
-//    {{-1, 1, -1}, {0, 0, 1, 1}},
-//    {{-1, 1, 1}, {0, 0, 0, 1}},
-//    // Bottom
-//    {{1, -1, -1}, {1, 0, 0, 1}},
-//    {{1, -1, 1}, {0, 1, 0, 1}},
-//    {{-1, -1, 1}, {0, 0, 1, 1}},
-//    {{-1, -1, -1}, {0, 0, 0, 1}}
-//};
 
-
-//const GLushort Indices[] = {
-//    // Front
-//    0, 1, 2,
-//    2, 3, 0,
-//    // Back
-//    4, 6, 5,
-//    4, 5, 7,
-//    // Left
-//    8, 9, 10,
-//    10, 11, 8,
-//    // Right
-//    12, 13, 14,
-//    14, 15, 12,
-//    // Top
-//    16, 17, 18,
-//    18, 19, 16,
-//    // Bottom
-//    20, 21, 22,
-//    22, 23, 20
-//};
 
 @interface glViewController () {
-    float _curRed;
     BOOL _increasing;
     GLuint _vertexBuffer;
     GLuint _indexBuffer;
+    GLuint _depthRenderBuffer;
     GLuint _vertexArray;
     float _rotation;
     GLKMatrix4 _rotMatrix;
@@ -86,6 +32,8 @@
     GLuint* _indices;
     float _zoom;
     float _avX, _avY , _avZ;
+    int _numIndexes;
+    int _touchCount;
 }
 @property (strong, nonatomic) EAGLContext *context;
 @property (strong, nonatomic) GLKBaseEffect *effect;
@@ -104,7 +52,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
     }
     return self;
 }
@@ -119,33 +66,26 @@
 
 #pragma mark - View lifecycle
 
-/*
- // Implement loadView to create a view hierarchy programmatically, without using a nib.
- - (void)loadView
- {
- }
- */
-    
-
-
-//    - (void)setupGL {
-//        int i;
-//        for (i=0; i<_vertexNumber; i++) {
-//            std::cout << "{{" << _vertices[i].Position[0] <<"," << _vertices[i].Position[1] <<","<< _vertices[i].Position[2] <<"}, {"<< _vertices[i].Color[0] <<"," << _vertices[i].Color[1]  << "," << _vertices[i].Color[2] <<","<< _vertices[i].Color[3] << " }}," << std::endl;
-//        }
-        
+  
 - (void)setupGL {
     
     _avX = 0;
     _avY = 0;
     _avZ = 0;
-    int i;
-    for (i=0 ; i<_vertexNumber ; i++){
-        // find average particle position inorder to center the particles in the view
-        _avX += _vertices[i].Position[0]/_vertexNumber;
-        _avY += _vertices[i].Position[1]/_vertexNumber;
-        _avZ += _vertices[i].Position[2]/_vertexNumber;
+    int i , goodCount;
+    for (i=0 , goodCount=0; i<_vertexNumber ; i++){
+        // find average vertex position inorder to center the mesh
+        if ( _vertices[i].Position[2] !=0 ){
+            _avX += _vertices[i].Position[0];
+            _avY += _vertices[i].Position[1];
+            _avZ += _vertices[i].Position[2];
+            goodCount++;
+        }
     }
+    _avX /= goodCount;
+    _avY /= goodCount;
+    _avZ /= goodCount;
+    // center the mesh in view
     for (i=0 ; i<_vertexNumber ; i++)
     {
         _vertices[i].Position[0]-=_avX;
@@ -153,13 +93,11 @@
         _vertices[i].Position[2]-=_avZ;
     }
     
-    
-
+    // create index array
     _indices = (GLuint*) malloc(sizeof(GLuint)*_vertexNumber*6);
     int _ny = 360;
     int _nx = 480;
-    int index = 0;
-    int bla;
+    _numIndexes = 0;
     for (int i = 0; i < _nx-1; i++) {
         for (int j = 0; j < _ny-1; j++) {
             
@@ -169,62 +107,73 @@
             int third = first + 1;
             int fourth = second + 1;
             
-            //                NSLog(@"%d %d %d %d %d %d", first,third,second, third, fourth, second);
+            if( _vertices[first].Position[2]!= -_avZ && _vertices[second].Position[2]!= -_avZ && _vertices[third].Position[2]!=-_avZ){
+                _indices[_numIndexes++] = first;
+                _indices[_numIndexes++] = third;
+                _indices[_numIndexes++] = second;
+            }
+            if( _vertices[fourth].Position[2]!=-_avZ && _vertices[second].Position[2]!=-_avZ && _vertices[third].Position[2]!=-_avZ){
+                
+                _indices[_numIndexes++] = third;
+                _indices[_numIndexes++] = fourth;
+                _indices[_numIndexes++] = second;
+            }
             
-            _indices[index++] = first;
-            _indices[index++] = third;
-            _indices[index++] = second;
-            
-            _indices[index++] = third;
-            _indices[index++] = fourth;
-            _indices[index++] = second;
-            
-            //std::cout << first <<"," << third <<"," << second <<"," << third <<"," << fourth <<"," << second <<","<< std::endl;
         }
     }
 
     _zoom=-1000;
+    // set EAGLContext
     [EAGLContext setCurrentContext:self.context];
-    glEnable(GL_CULL_FACE);
     
+    // create GLBaseEffect
+    // this saves compiling custom shaders
     self.effect = [[GLKBaseEffect alloc] init];
 
-    
-    // New lines
+    // enable depth testing
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glEnable(GL_CULL_FACE);
+    // generate and bind vertex array
     glGenVertexArraysOES(1, &_vertexArray);
     glBindVertexArrayOES(_vertexArray);
     
-    // Old stuff
+    // create and bind internal vertex buffer
     glGenBuffers(1, &_vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER , _vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, _vertexNumber*sizeof(float)*7, _vertices, GL_STATIC_DRAW);
     
+    // create and bind internal index buffer
     glGenBuffers(1, &_indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, _vertexNumber*sizeof(GLuint)*6, _indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, _numIndexes*sizeof(GLuint), _indices, GL_STATIC_DRAW);
+
     
-    // New lines (were previously in draw)
+    // enable vertex and index arrays and set their pointers
     glEnableVertexAttribArray(GLKVertexAttribPosition);
     glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid *) offsetof(Vertex, Position));
     glEnableVertexAttribArray(GLKVertexAttribColor);
     glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid *) offsetof(Vertex, Color));
 
     
-    // New line
     glBindVertexArrayOES(0);
     
+    // init rotMatrix and quat for later rotation
     _rotMatrix = GLKMatrix4Identity;
     _quat = GLKQuaternionMake(0, 0, 0, 1);
     _quatStart = GLKQuaternionMake(0, 0, 0, 1);
     
+    // init tap gesture recognizer and add to view
     UITapGestureRecognizer * dtRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
     dtRec.numberOfTapsRequired = 2;
     [self.view addGestureRecognizer:dtRec];
     
+
+    
 }
 
 - (void)doubleTap:(UITapGestureRecognizer *)tap {
-    
+    // when double tap event rotate mesh to original position
     _slerping = YES;
     _slerpCur = 0;
     _slerpMax = 1.0;
@@ -234,13 +183,12 @@
 }
 
 - (void)tearDownGL {
-    
+    // release all allocated memory
     [EAGLContext setCurrentContext:self.context];
     
     glDeleteBuffers(1, &_vertexBuffer);
     glDeleteBuffers(1, &_indexBuffer);
     free(_indices);
-    //glDeleteVertexArraysOES(1, &_vertexArray);
     
     self.effect = nil;
     
@@ -249,26 +197,30 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    // create EAGLContext and assign to self.context
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     
     if (!self.context) {
         NSLog(@"Failed to create ES context");
     }
     
+    // setup GLKView
     GLKView *view = (GLKView *)self.view;
     self.view.multipleTouchEnabled=YES;
     view.context = self.context;
     view.drawableMultisample = GLKViewDrawableMultisample4X;
+    view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+    _touchCount = 0;
+    // call setupGL to create all buffers and arrays for drawing
     [self setupGL];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    
+    // free the buffers
     [self tearDownGL];
-    
+    // release the context
     if ([EAGLContext currentContext] == self.context) {
         [EAGLContext setCurrentContext:nil];
     }
@@ -284,51 +236,36 @@
 #pragma mark - GLKViewDelegate
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
-    
-    glClearColor(_curRed, 0.0, 0.0, 1.0);
+    // background color
+    glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
+    // clear color buffer and z buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-    
+    glBindVertexArrayOES(_vertexArray);
+
     [self.effect prepareToDraw];
     
     glBindVertexArrayOES(_vertexArray);
-    glDrawElements(GL_TRIANGLES, _vertexNumber*6, GL_UNSIGNED_INT, 0);
-//    glDrawArrays(GL_TRIANGLES, 0, sizeof(Indices)/sizeof(Indices[0]));
+    // draw mesh as GL_TRIANGLES
+    glDrawElements(GL_TRIANGLES, _numIndexes, GL_UNSIGNED_INT, 0);
     
 }
 
 #pragma mark - GLKViewControllerDelegate
 
 - (void)update {
-//    if (_increasing) {
-//        _curRed += 1.0 * self.timeSinceLastUpdate;
-//    } else {
-//        _curRed -= 1.0 * self.timeSinceLastUpdate;
-//    }
-//    if (_curRed >= 1.0) {
-//        _curRed = 1.0;
-//        _increasing = NO;
-//    }
-//    if (_curRed <= 0.0) {
-//        _curRed = 0.0;
-//        _increasing = YES;
-//    }
-    
+    // set projection matrix
     float aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
-    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 4.0f, 1000.0f);
+    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 4.0f, 10000.0f);
     self.effect.transform.projectionMatrix = projectionMatrix;
-    
+    // set mdelView matrix
     GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, _zoom);
-//    _zoom+=2.f;
-//    NSLog(@"%f",_zoom);
-    //    _rotation += 90 * self.timeSinceLastUpdate;
-    //    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(25), 1, 0, 0);
-    //    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(_rotation), 0, 1, 0);
-    //    modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, _rotMatrix);
+    // set rotation matrix
     GLKMatrix4 rotation = GLKMatrix4MakeWithQuaternion(_quat);
+    // multiply model view by rotation matrix
     modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, rotation);
+    // set multiplied matrix to model transform matrix
     self.effect.transform.modelviewMatrix = modelViewMatrix;
-    
+    // slerping effect while rotating
     if (_slerping) {
         
         _slerpCur += self.timeSinceLastUpdate;
@@ -345,6 +282,7 @@
 
 - (GLKVector3) projectOntoSurface:(GLKVector3) touchPoint
 {
+    // this function projects your touch onto a sphere inorder to get a good rotation response to touch
     float radius = self.view.bounds.size.width/3;
     GLKVector3 center = GLKVector3Make(self.view.bounds.size.width/2, self.view.bounds.size.height/2, 0);
     GLKVector3 P = GLKVector3Subtract(touchPoint, center);
@@ -368,38 +306,36 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    //    NSLog(@"timeSinceLastUpdate: %f", self.timeSinceLastUpdate);
-    //    NSLog(@"timeSinceLastDraw: %f", self.timeSinceLastDraw);
-    //    NSLog(@"timeSinceFirstResume: %f", self.timeSinceFirstResume);
-    //    NSLog(@"timeSinceLastResume: %f", self.timeSinceLastResume);
-    //    self.paused = !self.paused;
+    // called when touche begin
+    // update number of touches active
+    _touchCount += [touches count];
     if ([touches count] == 1){
-        
+        // update anchor position and current position when touches begin
+        UITouch * touch = [touches anyObject];
+        CGPoint location = [touch locationInView:self.view];
     
-    UITouch * touch = [touches anyObject];
-    CGPoint location = [touch locationInView:self.view];
+        _anchor_position = GLKVector3Make(location.x, location.y, 0);
+        _anchor_position = [self projectOntoSurface:_anchor_position];
     
-    _anchor_position = GLKVector3Make(location.x, location.y, 0);
-    _anchor_position = [self projectOntoSurface:_anchor_position];
-    
-    _current_position = _anchor_position;
-    _quatStart = _quat;
+        _current_position = _anchor_position;
+        _quatStart = _quat;
     }
     
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-
+    // this method is called when the user moves a finger across the screen
     NSEnumerator * enumerator = [touches objectEnumerator];
-    UITouch * touch1 = [enumerator nextObject];
+    // get reference to touches
     
     UITouch * touch = [touches anyObject];
+    // get current and last location from touches and calculate diff
     CGPoint location = [touch locationInView:self.view];
     CGPoint lastLoc = [touch previousLocationInView:self.view];
     CGPoint diff = CGPointMake(lastLoc.x - location.x, lastLoc.y - location.y);
-    if ([touches count] == 2) {
+    if (_touchCount == 2) {
+        // if two finger touch change zoom according to the fingers distance change
         UITouch * touch2 = [enumerator nextObject];
-        
         CGPoint location2 = [touch2 locationInView:self.view];
         CGPoint	previousLocation1 = [touch previousLocationInView:self.view];
         CGPoint	previousLocation2 = [touch2 previousLocationInView:self.view];
@@ -411,10 +347,12 @@
         float changeInDistance = currentDistance - previousDistance;
         _zoom+= changeInDistance;
     }
-    else if ([touches count] ==1) {
+    else if (_touchCount==1) {
+        // if single touch calculate rotation
         float rotX = -1 * GLKMathDegreesToRadians(diff.y / 2.0);
         float rotY = -1 * GLKMathDegreesToRadians(diff.x / 2.0);
     
+        // update the rotation matrix according to x and y finger movement
         bool isInvertible;
         GLKVector3 xAxis = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(_rotMatrix, &isInvertible),GLKVector3Make(1, 0, 0));
         _rotMatrix = GLKMatrix4Rotate(_rotMatrix, rotX, xAxis.x, xAxis.y, xAxis.z);
@@ -425,11 +363,15 @@
         _current_position = [self projectOntoSurface:_current_position];
         [self computeIncremental];
     }
+}
 
-
+- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    _touchCount -= [touches count];
     
 }
 - (float) distanceBetweenPoint1:(CGPoint)point1 andPoint2:(CGPoint)point2 {
+    // eucledean distance between points
 	float dx = point1.x - point2.x;
 	float dy = point1.y - point2.y;
 	
@@ -439,7 +381,7 @@
 
 
 - (void)computeIncremental {
-    
+    // calculate total quaternion rotation since beginning
     GLKVector3 axis = GLKVector3CrossProduct(_anchor_position, _current_position);
     float dot = GLKVector3DotProduct(_anchor_position, _current_position);
     float angle = acosf(dot);

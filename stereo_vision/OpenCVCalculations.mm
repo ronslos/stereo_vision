@@ -326,7 +326,8 @@ int SADWindowSize = 0, numberOfDisparities = 0;
             py = static_cast<double>(i) + Q13;
             pz = Q23;
             if (pw ==0) {
-                pw = -255.0 * Q32 + Q33;;
+                pw = -1.0 * Q32 + Q33;
+                pz=0;
             }
             if ([[[NSUserDefaults standardUserDefaults]objectForKey:@"side"] hasPrefix:@"Left"] ){
                 px = px/pw;
