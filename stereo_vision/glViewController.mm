@@ -72,6 +72,8 @@
     _avX = 0;
     _avY = 0;
     _avZ = 0;
+    float crossNorm;
+    cv::Vec3f side1, side2 , cross;
     int i , goodCount;
     for (i=0 , goodCount=0; i<_vertexNumber ; i++){
         // find average vertex position inorder to center the mesh
@@ -106,17 +108,33 @@
             int second = first + (_ny );
             int third = first + 1;
             int fourth = second + 1;
-            
-            if( _vertices[first].Position[2]!= -_avZ && _vertices[second].Position[2]!= -_avZ && _vertices[third].Position[2]!=-_avZ){
-                _indices[_numIndexes++] = first;
-                _indices[_numIndexes++] = third;
-                _indices[_numIndexes++] = second;
+            float thresh = 15.0;
+            side1 = cv::Vec3f(_vertices[first].Position[0] - _vertices[second].Position[0], _vertices[first].Position[1] - _vertices[second].Position[1] ,_vertices[first].Position[2] - _vertices[second].Position[2]);
+            side2 = cv::Vec3f(_vertices[third].Position[0] - _vertices[second].Position[0], _vertices[third].Position[1] - _vertices[second].Position[1] ,_vertices[third].Position[2] - _vertices[second].Position[2]);
+            cross = side1.cross(side2);
+            crossNorm = cv::norm(cross);
+//            NSLog(@"%f", crossNorm);
+
+            if (crossNorm < thresh)
+            {
+                if( _vertices[first].Position[2]!= -_avZ && _vertices[second].Position[2]!= -_avZ && _vertices[third].Position[2]!=-_avZ){
+                    _indices[_numIndexes++] = first;
+                    _indices[_numIndexes++] = third;
+                    _indices[_numIndexes++] = second;
+                }
+
             }
-            if( _vertices[fourth].Position[2]!=-_avZ && _vertices[second].Position[2]!=-_avZ && _vertices[third].Position[2]!=-_avZ){
+            side1 = cv::Vec3f(_vertices[third].Position[0] - _vertices[second].Position[0], _vertices[third].Position[1] - _vertices[second].Position[1] ,_vertices[third].Position[2] - _vertices[second].Position[2]);
+            side2 = cv::Vec3f(_vertices[fourth].Position[0] - _vertices[second].Position[0], _vertices[fourth].Position[1] - _vertices[second].Position[1] ,_vertices[fourth].Position[2] - _vertices[second].Position[2]);
+            cross = side1.cross(side2);
+            crossNorm = cv::norm(cross);
+            if (crossNorm < thresh) {
+                if( _vertices[fourth].Position[2]!=-_avZ && _vertices[second].Position[2]!=-_avZ && _vertices[third].Position[2]!=-_avZ){
                 
-                _indices[_numIndexes++] = third;
-                _indices[_numIndexes++] = fourth;
-                _indices[_numIndexes++] = second;
+                    _indices[_numIndexes++] = third;
+                    _indices[_numIndexes++] = fourth;
+                    _indices[_numIndexes++] = second;
+                }
             }
             
         }
