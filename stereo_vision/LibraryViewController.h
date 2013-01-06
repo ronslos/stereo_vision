@@ -10,8 +10,9 @@
 #define libraryviewcontroller_h_
 
 #import <UIKit/UIKit.h>
-#import "Isgl3dViewController.h"
 #import "SessionManager.h"
+#import "glViewController.h"
+
 
 @interface LibraryViewController : UITableViewController <GKPeerPickerControllerDelegate>
 {

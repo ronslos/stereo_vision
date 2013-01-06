@@ -128,7 +128,6 @@
 		C53FCC04164986570061ABA4 /* glViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = glViewController.mm; sourceTree = "<group>"; };
 		C53FCC0716498BDD0061ABA4 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		C53FCC09164998260061ABA4 /* tile_floor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tile_floor.png; path = ../../../Downloads/HelloGLKit/HelloGLKit/tile_floor.png; sourceTree = "<group>"; };
-		C57EE92E164B9242007A1859 /* vertices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vertices.h; path = ../vertices.h; sourceTree = "<group>"; };
 		C5A448001621B85D00490911 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		C5A4484416222E4B00490911 /* particle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = particle.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -225,7 +224,6 @@
 		17C6A00915B5B02100372355 /* stereo_vision */ = {
 			isa = PBXGroup;
 			children = (
-				C57EE92E164B9242007A1859 /* vertices.h */,
 				C53FCC03164986570061ABA4 /* glViewController.h */,
 				C53FCC04164986570061ABA4 /* glViewController.mm */,
 				17C6A03115B5C67200372355 /* OpenCVCalculations.h */,

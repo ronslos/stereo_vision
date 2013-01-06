@@ -13,6 +13,7 @@
 #import "SessionManager.h"
 #import "ResponseFromSession.h"
 
+
 @interface ViewController : UIViewController <ResponseFromSession>
 {
     SessionManager * _sessionManager;
